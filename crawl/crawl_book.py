@@ -3,7 +3,7 @@ import time
 from selenium.webdriver import ActionChains
 import math
 import pandas as pd
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, UnexpectedAlertPresentException
 
 def getIndex(driver, content):
     elements = driver.find_elements_by_class_name("Ere_prod_mconts_LS")
@@ -23,8 +23,8 @@ def getBook(driver, bookIdx, data):
         event = driver.find_element_by_id('swiper_itemEvent')
         action = ActionChains(driver)
         action.move_to_element(event).perform()
-    except Exception as e:
-        print(e)
+    except UnexpectedAlertPresentException: # 19세 미만 로그인 필요 경고
+        return True
 
     try:
         title = driver.find_element_by_class_name("Ere_bo_title").text
