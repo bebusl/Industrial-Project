@@ -74,6 +74,7 @@ driver.implicitly_wait(1)
 action = ActionChains(driver)
 
 total = 10
+temp = total
 cidList = [1]
 totalPage = math.ceil(total / 25)
 
@@ -87,11 +88,9 @@ for cid in cidList:
         driver.get(url)
 
         for bookIdx in range(25):
-
-            if total <= 0:
+            if temp <= 0:
                 break
-
-            total -= 1
+            temp -= 1
 
             retryCount = 5
             while retryCount > 0:
@@ -102,6 +101,9 @@ for cid in cidList:
 
             if retryCount == 0:
                 print("수집 실패", page, bookIdx)
+
+            if temp % 10 == 0:
+                print(temp, "/", total, time.time() - start)
 
 driver.close()
 
