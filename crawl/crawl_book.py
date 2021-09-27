@@ -2,6 +2,7 @@ from selenium import webdriver
 import time
 from selenium.webdriver import ActionChains
 import math
+import pandas as pd
 
 def getIndex(driver, content):
     elements = driver.find_elements_by_class_name("Ere_prod_mconts_LS")
@@ -22,6 +23,8 @@ cidList = [1]
 totalPage = math.ceil(total / 25)
 
 start = time.time()
+
+data = {'title': [], 'intro': [], 'contents': []}
 
 for cid in cidList:
     for page in range(1, totalPage + 1):
@@ -59,12 +62,28 @@ for cid in cidList:
             intro = elements[introIndex].text.replace("\n", " ")
             contents = elements[contentsIndex].text.replace("\n", " ")
 
-            print(title)
-            print(intro)
-            print(contents)
+            if introIndex > 0 and contentsIndex == -1:
+                print(title, "목차 가져오기 실패")
+                data['title'].append(title)
+                data['intro'].append(intro)
+                data['contents'].append("")
+            elif introIndex == -1 and contentsIndex > 0:
+                print(title, "소개 가져오기 실패")
+                data['title'].append(title)
+                data['intro'].append("")
+                data['contents'].append(contents)
+            elif introIndex == -1 and contentsIndex == -1:
+                print(title, "소개/목차 가져오기 실패")
+            else:
+                data['title'].append(title)
+                data['intro'].append(intro)
+                data['contents'].append(contents)
 
             driver.back()
 
 driver.close()
 
 print("final", time.time() - start)
+
+df = pd.DataFrame(data)
+df.to_csv("C:/Users/ghks0/Desktop/Project/Industrial-Project/crawl/data.csv", index=False, encoding='utf-8-sig')
