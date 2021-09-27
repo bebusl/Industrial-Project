@@ -3,6 +3,7 @@ import time
 from selenium.webdriver import ActionChains
 import math
 import pandas as pd
+from selenium.common.exceptions import NoSuchElementException
 
 def getIndex(driver, content):
     elements = driver.find_elements_by_class_name("Ere_prod_mconts_LS")
@@ -18,7 +19,10 @@ def getBook(driver, bookIdx, data):
         f'//div[{bookIdx + 1}][@class="ss_book_box"]//*[@class="ss_book_list"]//li/a')
     book.click()
 
-    title = driver.find_element_by_class_name("Ere_bo_title").text
+    try:
+        title = driver.find_element_by_class_name("Ere_bo_title").text
+    except NoSuchElementException:
+        return False  # 재시도 해라 마!
 
     try:
         event = driver.find_element_by_id('swiper_itemEvent')
