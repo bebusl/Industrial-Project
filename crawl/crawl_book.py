@@ -20,7 +20,12 @@ def getBook(driver, bookIdx, data):
 
     title = driver.find_element_by_class_name("Ere_bo_title").text
 
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight / 2)")
+    try:
+        event = driver.find_element_by_id('swiper_itemEvent')
+        action.move_to_element(event).perform()
+    except:
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight / 2)")
+        time.sleep(0.3)
 
     try:
         # 목차에 더보기 버튼이 있을 때
@@ -30,7 +35,6 @@ def getBook(driver, bookIdx, data):
     except:
         pass
 
-    time.sleep(0.3)
 
     elements = driver.find_elements_by_class_name("Ere_prod_mconts_R")
     introIndex = getIndex(driver, "책소개")
