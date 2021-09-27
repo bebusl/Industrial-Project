@@ -25,6 +25,14 @@ for id in [279336165]:
 
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight / 2)")
 
+    try:
+        # 목차에 더보기 버튼이 있을 때
+        hasTOCMore = driver.find_element_by_id("div_TOC_All")
+
+        driver.execute_script("javascript:fn_show_introduce_TOC('TOC')")
+    except:
+        pass
+
     time.sleep(0.3)
 
     elements = driver.find_elements_by_class_name("Ere_prod_mconts_R")
