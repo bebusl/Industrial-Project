@@ -20,16 +20,16 @@ def getBook(driver, bookIdx, data):
     book.click()
 
     try:
+        event = driver.find_element_by_id('swiper_itemEvent')
+        action = ActionChains(driver)
+        action.move_to_element(event).perform()
+    except Exception as e:
+        print(e)
+
+    try:
         title = driver.find_element_by_class_name("Ere_bo_title").text
     except NoSuchElementException:
         return False  # 재시도 해라 마!
-
-    try:
-        event = driver.find_element_by_id('swiper_itemEvent')
-        action.move_to_element(event).perform()
-    except:
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight / 2)")
-        time.sleep(0.3)
 
     try:
         # 목차에 더보기 버튼이 있을 때
@@ -50,12 +50,10 @@ def getBook(driver, bookIdx, data):
     driver.back()
 
     if introIndex > 0 and contentsIndex == -1:
-        print(title, "목차 가져오기 실패")
         data['title'].append(title)
         data['intro'].append(intro)
         data['contents'].append("")
     elif introIndex == -1 and contentsIndex > 0:
-        print(title, "소개 가져오기 실패")
         data['title'].append(title)
         data['intro'].append("")
         data['contents'].append(contents)
