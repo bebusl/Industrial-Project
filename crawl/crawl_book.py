@@ -47,6 +47,8 @@ def getBook(driver, bookIdx, data):
     intro = elements[introIndex].text.replace("\n", " ")
     contents = elements[contentsIndex].text.replace("\n", " ")
 
+    driver.back()
+
     if introIndex > 0 and contentsIndex == -1:
         print(title, "목차 가져오기 실패")
         data['title'].append(title)
@@ -59,13 +61,11 @@ def getBook(driver, bookIdx, data):
         data['contents'].append(contents)
     elif introIndex == -1 and contentsIndex == -1:
         print(title, "소개/목차 가져오기 실패")
-        return False
     else:
         data['title'].append(title)
         data['intro'].append(intro)
         data['contents'].append(contents)
 
-    driver.back()
     return True
 
 chromedriver = 'C:/Temp/chromedriver.exe'
