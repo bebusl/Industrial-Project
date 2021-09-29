@@ -17,8 +17,6 @@ def clean(sentence):
 okt = Okt()
 
 data = pd.read_csv("./data.csv")
-stopwords = pd.read_csv("./stopwords.csv", encoding='CP949', header=None)
-aStopwords = list(stopwords.iloc[:, 0])
 
 size = data.shape[0]
 aMergeStr = []
@@ -31,12 +29,7 @@ for i in range(size):
 
     tokens = okt.nouns(mergeStr)
 
-    words = []
-    for token in tokens:
-        if token not in aStopwords:  # 불용어 제외
-            words.append(token)
-
-    aMergeStr.append(' '.join(words))
+    aMergeStr.append(' '.join(tokens))
 
 data['mergeStr'] = aMergeStr
 
