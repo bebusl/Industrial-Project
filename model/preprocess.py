@@ -2,6 +2,18 @@ import pandas as pd
 from konlpy.tag import Okt
 import re
 
+
+def clean(sentence):
+    if not isinstance(sentence, str):
+        return ""
+
+    if sentence[-2:] == "접기":
+        sentence = sentence[:-2]
+
+    sentence = re.sub('[^가-힣 | ' ']', '', sentence)
+    return sentence
+
+
 okt = Okt()
 
 data = pd.read_csv("./data.csv")
@@ -15,23 +27,9 @@ for i in range(size):
     intro = data.iloc[i, 1]
     contents = data.iloc[i, 2]
 
-    if not isinstance(intro, str):
-        intro = ""
-    else:
-        if intro[-2:] == "접기":
-            intro = intro[:-2]
+    mergeStr = clean(intro) + ' ' + clean(contents)
 
-    if not isinstance(contents, str):
-        contents = ""
-    else:
-        if contents[-2:] == "접기":
-            contents = contents[:-2]
-
-    mergeStr = intro + ' ' + contents
-
-    filteredStr = re.sub('[^가-힣 | ' ']', '', mergeStr)
-
-    tokens = okt.nouns(filteredStr)
+    tokens = okt.nouns(mergeStr)
 
     words = []
     for token in tokens:
