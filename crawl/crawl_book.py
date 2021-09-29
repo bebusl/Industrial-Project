@@ -5,15 +5,6 @@ import math
 import pandas as pd
 from selenium.common.exceptions import NoSuchElementException, UnexpectedAlertPresentException
 
-def getIndex(driver, content):
-    elements = driver.find_elements_by_class_name("Ere_prod_mconts_LS")
-    index = 0
-    for element in elements:
-        if element.text == content:
-            return index
-        index += 1
-    return -1
-
 def getBook(driver, bookIdx, data):
     book = driver.find_element_by_xpath(
         f'//div[{bookIdx + 1}][@class="ss_book_box"]//*[@class="ss_book_list"]//li/a')
@@ -39,25 +30,23 @@ def getBook(driver, bookIdx, data):
     except:
         pass
 
+    intro = ""
+    contents = ""
 
-    elements = driver.find_elements_by_class_name("Ere_prod_mconts_R")
-    introIndex = getIndex(driver, "책소개")
-    contentsIndex = getIndex(driver, "목차")
-
-    intro = elements[introIndex].text.replace("\n", " ")
-    contents = elements[contentsIndex].text.replace("\n", " ")
+    subtitles = driver.find_elements_by_class_name("Ere_prod_mconts_LS")
+    for subtitle in subtitles:
+        try:
+            element = subtitle.find_element_by_xpath(".//following-sibling::div[@class='Ere_prod_mconts_R']")
+            if subtitle.text == "책소개":
+                intro = element.text.replace("\n", " ")
+            elif subtitle.text == "목차":
+                contents = element.text.replace("\n", " ")
+        except:
+            pass
 
     driver.back()
 
-    if introIndex > 0 and contentsIndex == -1:
-        data['title'].append(title)
-        data['intro'].append(intro)
-        data['contents'].append("")
-    elif introIndex == -1 and contentsIndex > 0:
-        data['title'].append(title)
-        data['intro'].append("")
-        data['contents'].append(contents)
-    elif introIndex == -1 and contentsIndex == -1:
+    if intro == "" and contents == "":
         print(title, "소개/목차 가져오기 실패")
     else:
         data['title'].append(title)
