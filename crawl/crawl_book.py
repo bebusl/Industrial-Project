@@ -4,54 +4,64 @@ from selenium.webdriver import ActionChains
 import math
 import pandas as pd
 from selenium.common.exceptions import NoSuchElementException, UnexpectedAlertPresentException
+from selenium.webdriver.common.keys import Keys
 
 def getBook(driver, bookIdx, data):
-    book = driver.find_element_by_xpath(
-        f'//div[{bookIdx + 1}][@class="ss_book_box"]//*[@class="ss_book_list"]//li/a')
-    book.click()
-
     try:
-        event = driver.find_element_by_id('swiper_itemEvent')
-        action = ActionChains(driver)
-        action.move_to_element(event).perform()
-    except UnexpectedAlertPresentException: # 19세 미만 로그인 필요 경고
-        return True
-
-    try:
-        title = driver.find_element_by_class_name("Ere_bo_title").text
-    except NoSuchElementException:
-        return False  # 재시도 해라 마!
-
-    try:
-        # 목차에 더보기 버튼이 있을 때
-        hasTOCMore = driver.find_element_by_id("div_TOC_All")
-
-        driver.execute_script("javascript:fn_show_introduce_TOC('TOC')")
-    except:
-        pass
-
-    intro = ""
-    contents = ""
-
-    subtitles = driver.find_elements_by_class_name("Ere_prod_mconts_LS")
-    for subtitle in subtitles:
+        book = driver.find_element_by_xpath(
+            f'//div[{bookIdx + 1}][@class="ss_book_box"]//*[@class="ss_book_list"]//li/a')
         try:
-            element = subtitle.find_element_by_xpath(".//following-sibling::div[@class='Ere_prod_mconts_R']")
-            if subtitle.text == "책소개":
-                intro = element.text.replace("\n", " ")
-            elif subtitle.text == "목차":
-                contents = element.text.replace("\n", " ")
+            book.click()
+        except:
+            book.send_keys(Keys.ENTER)
+
+        try:
+            event = driver.find_element_by_id('swiper_itemEvent')
+            action = ActionChains(driver)
+            action.move_to_element(event).perform()
+        except:
+            return True
+
+
+        try:
+            title = driver.find_element_by_class_name("Ere_bo_title").text
+        except NoSuchElementException:
+            return False  # 재시도 해라 마!
+
+        try:
+            # 목차에 더보기 버튼이 있을 때
+            hasTOCMore = driver.find_element_by_id("div_TOC_All")
+
+            driver.execute_script("javascript:fn_show_introduce_TOC('TOC')")
         except:
             pass
 
-    driver.back()
+        intro = ""
+        contents = ""
 
-    if intro == "" and contents == "":
-        print(title, "소개/목차 가져오기 실패")
-    else:
-        data['title'].append(title)
-        data['intro'].append(intro)
-        data['contents'].append(contents)
+        subtitles = driver.find_elements_by_class_name("Ere_prod_mconts_LS")
+        for subtitle in subtitles:
+            try:
+                element = subtitle.find_element_by_xpath(".//following-sibling::div[@class='Ere_prod_mconts_R']")
+                if subtitle.text == "책소개":
+                    intro = element.text.replace("\n", " ")
+                elif subtitle.text == "목차":
+                    contents = element.text.replace("\n", " ")
+            except:
+                pass
+
+        driver.back()
+
+        if intro == "" and contents == "":
+            print(title, "소개/목차 가져오기 실패")
+        else:
+            data['title'].append(title)
+            data['intro'].append(intro)
+            data['contents'].append(contents)
+
+    except UnexpectedAlertPresentException: # 19세 미만 로그인 필요 경고
+        print("UnexpectedAlertPresentException")
+        pass
 
     return True
 
