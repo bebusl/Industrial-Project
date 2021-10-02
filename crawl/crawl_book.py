@@ -70,16 +70,14 @@ driver = webdriver.Chrome(chromedriver)
 driver.implicitly_wait(1)
 action = ActionChains(driver)
 
-total = 10
-temp = total
-cidList = [1]
+total = 1000
+cidList = [1230, 55890, 170, 2105, 987, 8257, 2551, 798, 1108, 55889, 1196, 74, 517, 1322, 13789, 656, 336, 112011, 2913, 1237, 2030, 1137, 50246, 76000, 76001]
 totalPage = math.ceil(total / 25)
-
 start = time.time()
 
-data = {'title': [], 'intro': [], 'contents': []}
-
 for cid in cidList:
+    data = {'title': [], 'intro': [], 'contents': []}
+    temp = total
     for page in range(1, totalPage + 1):
         url = f'https://www.aladin.co.kr/shop/wbrowse.aspx?BrowseTarget=List&ViewRowsCount=25&ViewType=Detail&PublishMonth=0&SortOrder=2&page={page}&Stockstatus=1&PublishDay=84&CID={cid}'
         driver.get(url)
@@ -100,11 +98,9 @@ for cid in cidList:
                 print("수집 실패", page, bookIdx)
 
             if temp % 10 == 0:
-                print(temp, "/", total, time.time() - start)
+                print(cid, temp, "/", total, time.time() - start)
+    print("final_" + str(cid), time.time() - start)
+    df = pd.DataFrame(data)
+    df.to_csv("./data_" + str(cid) + ".csv", index=False, encoding='utf-8-sig')
 
 driver.close()
-
-print("final", time.time() - start)
-
-df = pd.DataFrame(data)
-df.to_csv("C:/Users/ghks0/Desktop/Project/Industrial-Project/crawl/data.csv", index=False, encoding='utf-8-sig')
