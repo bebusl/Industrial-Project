@@ -28,7 +28,9 @@ for i in range(size):
 
     tokens = okt.nouns(mergeStr)
 
-    aMergeStr.append(' '.join(tokens))
+    filtered_tokens = list(set(tokens))
+
+    aMergeStr.append(' '.join(filtered_tokens))
 
 data['mergeStr'] = aMergeStr
 
