@@ -22,10 +22,9 @@ size = data.shape[0]
 aMergeStr = []
 
 for i in range(size):
-    intro = data.iloc[i, 1]
-    contents = data.iloc[i, 2]
+    title, intro, contents = data.iloc[i, 0], data.iloc[i, 1], data.iloc[i, 2]
 
-    mergeStr = clean(intro) + ' ' + clean(contents)
+    mergeStr = clean(title) + ' ' + clean(intro) + ' ' + clean(contents)
 
     tokens = okt.nouns(mergeStr)
 
