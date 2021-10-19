@@ -47,6 +47,7 @@ if __name__ == "__main__":
     total = 1000
     cidList = [1230, 55890, 170, 2105, 987, 8257, 2551, 798, 1108, 55889, 1196, 74, 517, 1322, 13789, 656, 336, 112011, 2913, 1237, 2030, 1137, 50246, 76000, 76001]
     count = 60
+    thread = 8
     totalPage = math.ceil(total / count)
     start = time.time()
 
@@ -69,7 +70,7 @@ if __name__ == "__main__":
                     if temp <= 0:
                         break
 
-                pool = multiprocessing.Pool(count)
+                pool = multiprocessing.Pool(thread)
                 for result in pool.map(get_books, bookList):
                     data["title"].extend(result["title"])
                     data["intro"].extend(result["intro"])
