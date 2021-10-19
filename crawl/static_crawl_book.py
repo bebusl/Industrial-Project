@@ -5,40 +5,40 @@ import math
 import pandas as pd
 import multiprocessing
 
-
 def get_books(book):
-    book_list = {'title': [], 'intro': [], 'contents': []}
-    res = requests.get(book)
+    book_list = None
+    try:
+        res = requests.get(book)
 
-    if res.status_code == 200:
-        book_info = BeautifulSoup(res.text, 'html.parser')
+        if res.status_code == 200:
+            book_info = BeautifulSoup(res.text, 'html.parser')
 
-        isbn2 = book_info.find(id="CoverMainImage").get("src")[-16:-6]
-        title = book_info.find(class_="Ere_bo_title").get_text(strip=True)
-        intro = ""
-        contents = ""
-        url = "https://www.aladin.co.kr/shop/product/getContents.aspx?ISBN="+isbn2+"&name=Introduce&type=0&date=7"
-        headers = {'Referer': book}
+            isbn2 = book_info.find(id="CoverMainImage").get("src")[-16:-6]
+            title = book_info.find(class_="Ere_bo_title").get_text(strip=True)
+            intro = ""
+            contents = ""
+            url = "https://www.aladin.co.kr/shop/product/getContents.aspx?ISBN=" + isbn2 + "&name=Introduce&type=0&date=7"
+            headers = {'Referer': book}
 
-        response = requests.get(url, headers=headers)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        boxs = soup.find_all(class_="Ere_prod_mconts_box")
-        for box in boxs:
-            try:
-                name = box.find(class_="Ere_prod_mconts_LL").text
-                if name == "목차":
-                    contents = box.find(class_="Ere_prod_mconts_R").get_text(strip=True)
-                if name == "책소개":
-                    intro = box.find(class_="Ere_prod_mconts_R").get_text(strip=True)
-            except Exception as e:
-                print(e)
+            response = requests.get(url, headers=headers)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            boxs = soup.find_all(class_="Ere_prod_mconts_box")
+            for box in boxs:
+                try:
+                    name = box.find(class_="Ere_prod_mconts_LL").text
+                    if name == "목차":
+                        contents = box.find(class_="Ere_prod_mconts_R").get_text(strip=True)
+                    if name == "책소개":
+                        intro = box.find(class_="Ere_prod_mconts_R").get_text(strip=True)
+                except Exception as e:
+                    print(book, e)
 
-        book_list["title"].append(title)
-        book_list["contents"].append(contents)
-        book_list["intro"].append(intro)
+            book_list = {"title": title, "contents": contents, "intro": intro}
 
-    else:
-        print("실패", book)
+        else:
+            print("실패", book)
+    except Exception as e:
+        print(book, e)
 
     return book_list
 
