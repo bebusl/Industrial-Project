@@ -5,6 +5,7 @@ import math
 import pandas as pd
 import multiprocessing
 
+
 def get_books(book):
     book_list = None
     try:
@@ -13,11 +14,11 @@ def get_books(book):
         if res.status_code == 200:
             book_info = BeautifulSoup(res.text, 'html.parser')
 
-            isbn2 = book_info.find(id="CoverMainImage").get("src")[-16:-6]
+            isbn2 = book_info.find(id="wa_product_top1_wa_Top_BtnSet1_hd_ISBN").get("value")
             title = book_info.find(class_="Ere_bo_title").get_text(strip=True)
             intro = ""
             contents = ""
-            url = "https://www.aladin.co.kr/shop/product/getContents.aspx?ISBN=" + isbn2 + "&name=Introduce&type=0&date=7"
+            url = "https://www.aladin.co.kr/shop/product/getContents.aspx?ISBN=" + isbn2 + "&name=Introduce&type=0&date=0"
             headers = {'Referer': book}
 
             response = requests.get(url, headers=headers)
