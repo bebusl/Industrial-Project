@@ -44,17 +44,19 @@ def get_books(book):
 
 
 if __name__ == "__main__":
-    total = 1000
-    cidList = [1230, 55890, 170, 2105, 987, 8257, 2551, 798, 1108, 55889, 1196, 74, 517, 1322, 13789, 656, 336, 112011, 2913, 1237, 2030, 1137, 50246, 76000, 76001]
+    totals = [3200, 6600, 16600, 3300, 6800, 48000, 7500, 19000, 39800, 33900, 27800, 10600, 3400, 6800, 11500, 8600, 16600, 15800, 6900, 9000, 25000, 2200, 4300, 7100]
+    cidList = [1230, 55890, 170, 2105, 987, 8257, 2551, 798, 1, 1383, 1108, 55889, 1196, 74, 517, 1322, 13789, 656, 336, 112011, 1237, 2030, 1137, 351]
     count = 60
     thread = 8
-    totalPage = math.ceil(total / count)
-    start = time.time()
 
-    for cid in cidList:
+    for i in range(len(cidList)):
+        cid = cidList[i]
+        total = totals[i]
         data = {'title': [], 'intro': [], 'contents': []}
+        totalPage = math.ceil(total / count)
         temp = total
         for page in range(1, totalPage + 1):
+            start = time.time()
             url = f'https://www.aladin.co.kr/shop/wbrowse.aspx?BrowseTarget=List&ViewRowsCount={count}&ViewType=Detail&PublishMonth=0&SortOrder=2&page={page}&Stockstatus=1&PublishDay=84&CID={cid}'
             response = requests.get(url)
 
