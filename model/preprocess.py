@@ -14,24 +14,20 @@ def clean(sentence):
     return sentence
 
 
-okt = Okt()
-
-data = pd.read_csv("./data.csv")
-
-size = data.shape[0]
-aMergeStr = []
-
-for i in range(size):
-    title, intro, contents = data.iloc[i, 0], data.iloc[i, 1], data.iloc[i, 2]
-
+def func(title, intro, contents):
     mergeStr = clean(title) + ' ' + clean(intro) + ' ' + clean(contents)
 
     tokens = okt.nouns(mergeStr)
 
     filtered_tokens = list(set(tokens))
 
-    aMergeStr.append(' '.join(filtered_tokens))
+    return ' '.join(filtered_tokens)
 
-data['mergeStr'] = aMergeStr
 
-data.to_csv("./result.csv", index=False)
+okt = Okt()
+
+data = pd.read_csv("./output/merge_data2.csv", header=0)
+
+data['mergeStr'] = data[['title', 'intro', 'contents']].apply(lambda x:func(x[0], x[1], x[2]), axis=1)
+
+data.to_csv("./output/result.csv", index=False, encoding='utf-8-sig')
