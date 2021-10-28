@@ -68,7 +68,6 @@ class ProcessForm(QDialog):
         self.tableWidget.setRowCount(2)
         self.tableWidget.setColumnCount(len(self.reviews[0]))
         self.tableWidget.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.tableWidget.viewport().installEventFilter(self)
         self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget.cellClicked.connect(self.__mycell_clicked)
         self.setTableWidgetData()
@@ -102,16 +101,6 @@ class ProcessForm(QDialog):
             self.output[self.cur_index][col] = self.NATURAL
 
         self.setTableWidgetData()
-
-    def eventFilter(self, source, event):
-        col = self.tableWidget.currentColumn()
-        if (event.type() == QtCore.QEvent.MouseButtonPress and event.buttons() == QtCore.Qt.RightButton):
-            self.output[self.cur_index][col] = self.NEG
-            self.setTableWidgetData()
-        elif (event.type() == QtCore.QEvent.MouseButtonPress and event.buttons() == QtCore.Qt.MidButton):
-            self.output[self.cur_index][col] = self.NEU
-            self.setTableWidgetData()
-        return QtCore.QObject.event(source, event)
 
     def getNextReview(self):
         self.tableWidget.scrollTo(self.tableWidget.model().index(0, 0))
