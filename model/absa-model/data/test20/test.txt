@@ -1,0 +1,20 @@
+Yum!####Yum=O !=O
+Serves really good sushi!####Serves=O really=O good=O sushi=T-POS !=O
+Not the biggest portions but adequate.####Not=O the=O biggest=O portions=T-NEU but=O adequate=O .=O
+Green Tea creme brulee is a must!####Green=T-POS Tea=T-POS creme=T-POS brulee=T-POS is=O a=O must=O !=O
+Don't leave the restaurant without it.####Do=O n't=O leave=O the=O restaurant=O without=O it=O .=O
+No Comparison####No=O Comparison=O
+– I can't say enough about this place.####I=O ca=O n't=O say=O enough=O about=O this=O place=T-POS .=O
+It has great sushi and even better service.####It=O has=O great=O sushi=T-POS and=O even=O better=O service=T-POS .=O
+The entire staff was extremely accomodating and tended to my every need.####The=O entire=O staff=T-POS was=O extremely=O accomodating=O and=O tended=O to=O my=O every=O need=O .=O
+I've been to this restaurant over a dozen times with no complaints to date.####I=O 've=O been=O to=O this=O restaurant=T-POS over=O a=O dozen=O times=O with=O no=O complaints=O to=O date=O .=O
+Snotty Attitude####Snotty=O Attitude=O
+– We were treated very rudely here one time for breakfast.####We=O were=O treated=O very=O rudely=O here=O one=O time=O for=O breakfast=O .=O
+The owner is belligerent to guests that have a complaint.####The=O owner=T-NEG is=O belligerent=O to=O guests=O that=O have=O a=O complaint=O .=O
+Good food!####Good=O food=T-POS !=O
+– We love breakfast food.####We=O love=O breakfast=O food=O .=O
+This is a great place to get a delicious meal.####This=O is=O a=O great=O place=O to=O get=O a=O delicious=O meal=T-POS .=O
+We never had to wait more than 5 minutes.####We=O never=O had=O to=O wait=O more=O than=O 5=O minutes=O .=O
+The staff is pretty friendly.####The=O staff=T-POS is=O pretty=O friendly=O .=O
+The onion rings are great!####The=O onion=T-POS rings=T-POS are=O great=O !=O
+They are not greasy or anything.####They=O are=O not=O greasy=O or=O anything=O .=O
