@@ -7,53 +7,57 @@ import multiprocessing
 
 
 def get_books(book):
-    book_list = {'title': [], 'intro': [], 'contents': []}
-    res = requests.get(book)
+    book_list = None
+    try:
+        res = requests.get(book)
 
-    if res.status_code == 200:
-        book_info = BeautifulSoup(res.text, 'html.parser')
+        if res.status_code == 200:
+            book_info = BeautifulSoup(res.text, 'html.parser')
 
-        isbn2 = book_info.find(id="CoverMainImage").get("src")[-16:-6]
-        title = book_info.find(class_="Ere_bo_title").get_text(strip=True)
-        intro = ""
-        contents = ""
-        url = "https://www.aladin.co.kr/shop/product/getContents.aspx?ISBN="+isbn2+"&name=Introduce&type=0&date=7"
-        headers = {'Referer': book}
+            isbn2 = book_info.find(id="wa_product_top1_wa_Top_BtnSet1_hd_ISBN").get("value")
+            title = book_info.find(class_="Ere_bo_title").get_text(strip=True)
+            intro = ""
+            contents = ""
+            url = "https://www.aladin.co.kr/shop/product/getContents.aspx?ISBN=" + isbn2 + "&name=Introduce&type=0&date=0"
+            headers = {'Referer': book}
 
-        response = requests.get(url, headers=headers)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        boxs = soup.find_all(class_="Ere_prod_mconts_box")
-        for box in boxs:
-            try:
-                name = box.find(class_="Ere_prod_mconts_LL").text
-                if name == "목차":
-                    contents = box.find(class_="Ere_prod_mconts_R").get_text(strip=True)
-                if name == "책소개":
-                    intro = box.find(class_="Ere_prod_mconts_R").get_text(strip=True)
-            except Exception as e:
-                print(e)
+            response = requests.get(url, headers=headers)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            boxs = soup.find_all(class_="Ere_prod_mconts_box")
+            for box in boxs:
+                try:
+                    name = box.find(class_="Ere_prod_mconts_LL").text
+                    if name == "목차":
+                        contents = box.find(class_="Ere_prod_mconts_R").get_text(strip=True)
+                    if name == "책소개":
+                        intro = box.find(class_="Ere_prod_mconts_R").get_text(strip=True)
+                except Exception as e:
+                    print(book, e)
 
-        book_list["title"].append(title)
-        book_list["contents"].append(contents)
-        book_list["intro"].append(intro)
+            book_list = {"title": title, "contents": contents, "intro": intro}
 
-    else:
-        print("실패", book)
+        else:
+            print("실패", book)
+    except Exception as e:
+        print(book, e)
 
     return book_list
 
 
 if __name__ == "__main__":
-    total = 1000
-    cidList = [1230, 55890, 170, 2105, 987, 8257, 2551, 798, 1108, 55889, 1196, 74, 517, 1322, 13789, 656, 336, 112011, 2913, 1237, 2030, 1137, 50246, 76000, 76001]
+    totals = [3200, 6600, 16600, 3300, 6800, 48000, 7500, 19000, 39800, 33900, 27800, 10600, 3400, 6800, 11500, 8600, 16600, 15800, 6900, 9000, 25000, 2200, 4300, 7100]
+    cidList = [1230, 55890, 170, 2105, 987, 8257, 2551, 798, 1, 1383, 1108, 55889, 1196, 74, 517, 1322, 13789, 656, 336, 112011, 1237, 2030, 1137, 351]
     count = 60
-    totalPage = math.ceil(total / count)
-    start = time.time()
+    thread = 8
 
-    for cid in cidList:
+    for i in range(len(cidList)):
+        cid = cidList[i]
+        total = totals[i]
         data = {'title': [], 'intro': [], 'contents': []}
+        totalPage = math.ceil(total / count)
         temp = total
         for page in range(1, totalPage + 1):
+            start = time.time()
             url = f'https://www.aladin.co.kr/shop/wbrowse.aspx?BrowseTarget=List&ViewRowsCount={count}&ViewType=Detail&PublishMonth=0&SortOrder=2&page={page}&Stockstatus=1&PublishDay=84&CID={cid}'
             response = requests.get(url)
 
@@ -69,7 +73,7 @@ if __name__ == "__main__":
                     if temp <= 0:
                         break
 
-                pool = multiprocessing.Pool(count)
+                pool = multiprocessing.Pool(thread)
                 for result in pool.map(get_books, bookList):
                     data["title"].extend(result["title"])
                     data["intro"].extend(result["intro"])
