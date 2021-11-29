@@ -1,0 +1,1 @@
+python work.py --absa_home ./bert-tfm-korea-finetune --ckpt ./bert-tfm-korea-finetune/checkpoint-1000 --model_type bert --data_dir ./data/korea --task_name korea --model_name_or_path beomi/KcELECTRA-base --cache_dir ./cache --max_seq_length 256 --tagging_schema BIEOS
