@@ -7,8 +7,8 @@ import numpy as np
 
 from glue_utils import convert_examples_to_seq_features, output_modes, processors, compute_metrics_absa
 from tqdm import tqdm, trange
-from transformers import BertConfig, BertTokenizer, XLNetConfig, XLNetTokenizer, WEIGHTS_NAME
-from transformers import AdamW, get_linear_schedule_with_warmup
+from transformers import BertConfig, XLNetConfig, XLNetTokenizer, WEIGHTS_NAME
+from transformers import AdamW, AutoTokenizer
 from absa_layer import BertABSATagger, XLNetABSATagger
 
 from torch.utils.data import DataLoader, TensorDataset, RandomSampler, SequentialSampler
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 #ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (BertConfig, XLNetConfig)), ())
 ALL_MODELS = (
-     'bert-base-uncased',
+ 'bert-base-uncased',
  'bert-large-uncased',
  'bert-base-cased',
  'bert-large-cased',
@@ -39,12 +39,13 @@ ALL_MODELS = (
  'bert-base-german-dbmdz-cased',
  'bert-base-german-dbmdz-uncased',
  'xlnet-base-cased',
- 'xlnet-large-cased'
+ 'xlnet-large-cased',
+ 'beomi/KcELECTRA-base'
 )
 
 
 MODEL_CLASSES = {
-    'bert': (BertConfig, BertABSATagger, BertTokenizer),
+    'bert': (BertConfig, BertABSATagger, AutoTokenizer),
     'xlnet': (XLNetConfig, XLNetABSATagger, XLNetTokenizer)
 }
 
@@ -174,7 +175,7 @@ def train(args, train_dataset, model, tokenizer):
         {'params': [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
         ]
     optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate, eps=args.adam_epsilon)
-    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=args.warmup_steps, num_training_steps=t_total)
+    #scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=args.warmup_steps, num_training_steps=t_total)
 
     # Train!
 
@@ -218,7 +219,7 @@ def train(args, train_dataset, model, tokenizer):
             tr_loss += loss.item()
             if (step + 1) % args.gradient_accumulation_steps == 0:
                 optimizer.step()
-                scheduler.step()  # Update learning rate schedule
+                #scheduler.step()  # Update learning rate schedule
                 model.zero_grad()
                 global_step += 1
 
@@ -228,7 +229,7 @@ def train(args, train_dataset, model, tokenizer):
                         results = evaluate(args, model, tokenizer)
                         for key, value in results.items():
                             tb_writer.add_scalar('eval_{}'.format(key), value, global_step)
-                    tb_writer.add_scalar('lr', scheduler.get_lr()[0], global_step)
+                    #tb_writer.add_scalar('lr', scheduler.get_lr()[0], global_step)
                     tb_writer.add_scalar('loss', (tr_loss - logging_loss)/args.logging_steps, global_step)
                     logging_loss = tr_loss
 
@@ -423,7 +424,7 @@ def main():
     config = config_class.from_pretrained(args.config_name if args.config_name else args.model_name_or_path,
                                           num_labels=num_labels, finetuning_task=args.task_name, cache_dir="./cache")
     tokenizer = tokenizer_class.from_pretrained(args.tokenizer_name if args.tokenizer_name else args.model_name_or_path,
-                                                do_lower_case=args.do_lower_case, cache_dir='./cache')
+                                                cache_dir='./cache')
 
     config.absa_type = args.absa_type
     config.tfm_mode = args.tfm_mode
@@ -482,7 +483,7 @@ def main():
         dev_result = evaluate(args, model, tokenizer, mode='dev', prefix=global_step)
 
         # regard the micro-f1 as the criteria of model selection
-        if int(global_step) > 1000 and dev_result['micro-f1'] > best_f1:
+        if global_step and int(global_step) > 1000 and dev_result['micro-f1'] > best_f1:
             best_f1 = dev_result['micro-f1']
             best_checkpoint = checkpoint
         dev_result = dict((k + '_{}'.format(global_step), v) for k, v in dev_result.items())
@@ -513,7 +514,7 @@ def main():
     log_file.write("\tValidation:\n")
     for (test_f1_k, test_f1_v), (test_loss_k, test_loss_v), (dev_f1_k, dev_f1_v), (dev_loss_k, dev_loss_v) in zip(
             test_f1_values, test_loss_values, dev_f1_values, dev_loss_values):
-        global_step = int(test_f1_k.split('_')[-1])
+        global_step = int(test_f1_k.split('_')[-1]) if test_f1_k.split('_')[-1] else 0
         if not args.overfit and global_step <= 1000:
             continue
         print('test-%s: %.5lf, test-%s: %.5lf, dev-%s: %.5lf, dev-%s: %.5lf' % (test_f1_k,
@@ -540,7 +541,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-

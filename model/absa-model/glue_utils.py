@@ -166,7 +166,7 @@ class ABSAProcessor(DataProcessor):
                         class_count[1] += 1
                     if s == 'NEU':
                         class_count[2] += 1
-                examples.append(InputExample(guid=guid, text_a=text_a, text_b=None, label=tags))
+                examples.append(InputExample(guid=guid, text_a=text_a, text_b=sent_string, label=tags))
                 sample_id += 1
         print("%s class count: %s" % (set_type, class_count))
         return examples
@@ -218,6 +218,10 @@ def convert_examples_to_seq_features(examples, label_list, tokenizer,
             tid += len(subwords)
         #print(evaluate_label_ids)
         assert tid == len(tokens_a)
+
+        if len(tokens_a) > 298:
+            continue
+
         evaluate_label_ids = np.array(evaluate_label_ids, dtype=np.int32)
         examples_tokenized.append((tokens_a, labels_a, evaluate_label_ids))
         if len(tokens_a) > max_seq_length:
@@ -439,7 +443,7 @@ def compute_metrics_absa(preds, labels, all_evaluate_label_ids, tagging_schema):
                         'B-NEG': 6, 'I-NEG': 7, 'E-NEG': 8, 'S-NEG': 9,
                         'B-NEU': 10, 'I-NEU': 11, 'E-NEU': 12, 'S-NEU': 13}
     elif tagging_schema == 'BIO':
-        absa_label_vocab = {'O': 0, 'EQ': 1, 'B-POS': 2, 'I-POS': 3, 
+        absa_label_vocab = {'O': 0, 'EQ': 1, 'B-POS': 2, 'I-POS': 3,
         'B-NEG': 4, 'I-NEG': 5, 'B-NEU': 6, 'I-NEU': 7}
     elif tagging_schema == 'OT':
         absa_label_vocab = {'O': 0, 'EQ': 1, 'T-POS': 2, 'T-NEG': 3, 'T-NEU': 4}
@@ -521,6 +525,7 @@ processors = {
     "rest14": ABSAProcessor,
     "rest15": ABSAProcessor,
     "rest16": ABSAProcessor,
+    "korea": ABSAProcessor,
 }
 
 output_modes = {
@@ -540,4 +545,5 @@ output_modes = {
     "rest15": "classification",
     "rest16": "classification",
     "rest_total_revised": "classification",
+    "korea": "classification",
 }
