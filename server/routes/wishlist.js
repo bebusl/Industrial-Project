@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { jwtMiddleware } = require("./middlewares");
-const Wishlist = require("../model/wishilist");
+const Wishlist = require("../model/wishlist");
 const User = require("../model/user");
 
 const findWishlistId = async (id) => {
