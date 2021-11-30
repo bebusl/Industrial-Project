@@ -4,7 +4,7 @@ const SearchKeyword = require("../model/searchKeyword");
 const { isLogin } = require("./middlewares");
 
 //처음 검색
-router.get("/:searchKeyword", isLogin, (req, res) => {
+router.get("/:searchKeyword", isLogin, async (req, res) => {
   const { search } = req.params;
   if (req.isLogin) {
     const id = req.userEmail;
