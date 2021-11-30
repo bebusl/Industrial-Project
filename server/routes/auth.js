@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const JWT_SECRET = require("../env").JWT_SECRET;
 const User = require("../model/user");
-const Wishlist = require("../model/wishilist");
+const Wishlist = require("../model/wishlist");
 const SearchKeyword = require("../model/searchKeyword");
 const { jwtMiddleware } = require("./middlewares");
 const ObjectId = require("mongoose").Types.ObjectId;
@@ -57,7 +57,7 @@ router.post("/register", (req, res) => {
         newUser.save();
         return res.json({ success: true, user: user });
       } catch (e) {
-        return res.json({ success: false, msg: "db생성 실패" });
+        return res.status(302).json({ success: false, msg: "db생성 실패" });
       }
     }
   });
@@ -71,7 +71,7 @@ router.post("/login", (req, res) => {
   User.findOne({ id }).then((user) => {
     if (!user) {
       const error = "해당하는 회원이 존재하지 않습니다.";
-      return res.status(400).json({ errors: error });
+      return res.status(401).json({ errors: error });
     }
 
     bcrypt.compare(password, user.password).then((isMatch) => {
