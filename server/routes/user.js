@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const User = require("../model/user");
-const Wishlist = require("../model/wishilist");
+const Wishlist = require("../model/wishlist");
 const SearchKeyword = require("../model/searchKeyword");
 const { jwtMiddleware } = require("./middlewares");
 
@@ -14,7 +14,7 @@ const findIds = async (id) => {
   //wishlistId는 ObjectId타입이므로 주의
 };
 
-router.get("/", jwtMiddleware, (req, res) => {
+router.get("/", jwtMiddleware, async (req, res) => {
   const id = req.userEmail;
   const { wishlistId, searchKeywordId } = findIds(id);
   let data;
