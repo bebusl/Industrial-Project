@@ -77,12 +77,13 @@ if __name__ == "__main__":
 
                 pool = multiprocessing.Pool(thread)
                 for result in pool.map(get_books, bookList):
-                    data["title"].extend(result["title"])
-                    data["isbn"].extend(result["isbn"])
-                    data["isbn13"].extend(result["isbn13"])
-                    data["itemId"].extend(result["itemId"])
-                    data["intro"].extend(result["intro"])
-                    data["contents"].extend(result["contents"])
+                    if result is not None:
+                        data["title"].extend(result["title"])
+                        data["isbn"].extend(result["isbn"])
+                        data["isbn13"].extend(result["isbn13"])
+                        data["itemId"].extend(result["itemId"])
+                        data["intro"].extend(result["intro"])
+                        data["contents"].extend(result["contents"])
 
                 print(str(cid), temp, "/", "total", time.time() - start)
 
