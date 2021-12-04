@@ -45,12 +45,15 @@ def get_book(book):
             if itemid is None:
                 itemid = ''
 
-            book_list = { "title": title, 'isbn': isbn, 'isbn13': isbn13, 'itemId': itemid, "contents": contents, "intro": intro }
+            book_list = {"title": title, 'isbn': isbn, 'isbn13': isbn13, 'itemId': itemid, "contents": contents,
+                         "intro": intro}
 
         else:
             print("실패", book)
     except NewConnectionError as e:
         print(book, e)
+    except:
+        pass
 
     return book_list
 
