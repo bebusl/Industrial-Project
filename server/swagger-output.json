@@ -1,391 +1,385 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "version": "1.0.0",
-    "title": "REST API",
-    "description": ""
-  },
-  "host": "localhost:3000",
-  "basePath": "/",
-  "tags": [
-    { "name": "AUTH", "description": "회원가입/로그인/인증관련 endpoint" },
-    { "name": "BOOK", "description": "책 정보 호출 endpoint" },
-    {
-      "name": "RECOMMENDATION",
-      "description": "검색/키워드 선택 관련 endpoint"
-    },
-    { "name": "USER", "description": "마이페이지 관련 endpoint" },
-    { "name": "WISHLIST", "description": "장바구니 추가/삭제 endpoint" }
-  ],
-  "schemes": ["http"],
-  "consumes": [],
-  "produces": [],
-  "paths": {
-    "/auth/": {
-      "get": {
-        "tags": ["AUTH"],
-        "description": "정상적으로 서버 실행중인지 테스트할 수 있는 리퀘스트. 응답으로 'Auth Router test'가 오면 정상",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/auth/register": {
-      "post": {
-        "tags": ["AUTH"],
-        "description": "회원가입. parameter와 함께 보내면 해당 정보로 회원 등록이 됨",
-        "parameters": [
-          {
-            "name": "obj",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "example": "test@email.com"
-                },
-                "nickname": {
-                  "example": "닉네임"
-                },
-                "password": {
-                  "example": "비번"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "회원가입 성공",
-            "examples": {
-              "application/json": {
-                "success": true
-              }
-            }
-          },
-
-          "302": {
-            "description": "db생성에 실패"
-          },
-          "404": {
-            "description": "중복 이메일 존재"
-          }
-        }
-      }
-    },
-    "/auth/login": {
-      "post": {
-        "tags": ["AUTH"],
-        "description": "파라미터로 아이디(이메일), 비번보내면 로그인",
-        "parameters": [
-          {
-            "name": "obj",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "example": "test@email.com"
-                },
-                "password": {
-                  "example": "비번"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "로그인 성공",
-            "examples": {
-              "application/json": {
-                "success": "true",
-                "userData": { "id": "user아이디(이메일)", "nickname": "닉네임" }
-              }
-            }
-          },
-          "400": {
-            "description": "패스워드 불일치"
-          },
-          "401": {
-            "description": "회원이 존재하지 않음"
-          }
-        }
-      }
-    },
-    "/auth/logout": {
-      "get": {
-        "tags": ["AUTH"],
-        "description": "로그아웃. 아무것도 보낼 필요 없이 해당 요청만 보내면 됨",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "로그아웃 성공, 토큰을 삭제함",
-            "examples": {
-              "application/json": {
-                "success": "true"
-              }
-            }
-          },
-          "400": {
-            "description": "잘못된 토큰. 해당 유저 없음."
-          },
-          "500": {
-            "description": "토큰 해석 실패"
-          },
-          "501": {
-            "description": "저장된 토큰 없음. 로그인 풀리게 하면 됨"
-          }
-        }
-      }
-    },
-    "/auth/status": {
-      "get": {
-        "tags": ["AUTH"],
-        "description": "로그인 상태 확인(토큰을 이용해 정상 로그인 중인지 확인)",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "정상 로그인 확인 성공",
-            "examples": {
-              "application/json": {
-                "success": "true",
-                "userData": { "id": "user아이디(이메일)", "nickname": "닉네임" }
-              }
-            }
-          },
-          "400": {
-            "description": "잘못된 토큰. 해당 유저 없음."
-          },
-          "500": {
-            "description": "토큰 해석 실패"
-          },
-          "501": {
-            "description": "저장된 토큰 없음. 로그인 풀리게 하면 됨"
-          }
-        }
-      }
-    },
-    "/user/": {
-      "get": {
-        "tags": ["USER"],
-        "description": "사용자 마이페이지. 사용자의 장바구니 목록과 검색 키워드 기록 목록 반환",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "성공",
-            "examples": {
-              "application/json": {
-                "success": "true",
-                "wishlists": ["위시리스트 도서 id1", "위시리스트 도서 id2"],
-                "searchkeywords": ["키워드1", "키워드2"]
-              }
-            }
-          },
-          "302": {
-            "description": "db조회 실패"
-          },
-          "400": {
-            "description": "잘못된 토큰. 해당 유저 없음."
-          },
-          "500": {
-            "description": "토큰 해석 실패"
-          },
-          "501": {
-            "description": "저장된 토큰 없음. 로그인 풀리게 하면 됨"
-          }
-        }
-      }
-    },
-    "/wishlist/{id}": {
-      "get": {
-        "tags": ["WISHLIST"],
-        "description": "파라미터로 전달한 id에 해당하는 도서를 장바구니에서 추가",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "위시리스트에 추가 성공",
-            "examples": {
-              "application/json": {
-                "success": "true",
-                "msg": "찜을 성공했습니다."
-              }
-            }
-          },
-          "302": {
-            "description": "Found"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "description": "Not Implemented"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["WISHLIST"],
-        "description": "파라미터로 전달한 id값에 해당하는 도서를 장바구니에서 삭제",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "찜 삭제 성공",
-            "examples": {
-              "application/json": {
-                "success": "true",
-                "msg": "찜 삭제를 성공했습니다."
-              }
-            }
-          },
-          "302": {
-            "description": "Found"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "description": "Not Implemented"
-          }
-        }
-      }
-    },
-    "/recommendation/{searchKeyword}": {
-      "get": {
-        "tags": ["RECOMMENDATION"],
-        "description": "제일 처음 메인페이지에서의 검색. 키워드/책 제목을 검색했을 때 요청은 여기로",
-        "parameters": [
-          {
-            "name": "searchKeyword",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "검색 성공",
-            "examples": {
-              "application/json": {
-                "success": "true",
-                "keywords": [
-                  "keyword1",
-                  "keyword2",
-                  "keyword3",
-                  "keyword4",
-                  "keyword5"
-                ]
-              }
-            }
-          },
-          "400": {
-            "description": "잘못된 토큰. 토큰에 해당하는 유저가 없음"
-          },
-          "500": {
-            "description": "토큰 해석에 실패"
-          }
-        }
-      }
-    },
-    "/recommendation/keywords": {
-      "post": {
-        "tags": ["RECOMMENDATION"],
-        "description": "키워드 선택. 선택한 키워드를 리스트에 담아서 보내주세요",
-        "parameters": {
-          "name": "keywords",
-          "in": "path",
-          "required": true,
-          "type": "array"
-        },
-        "responses": {
-          "200": {
-            "description": "키워드 선택해서 추천 성공, 아직 추천 결과와 연결되지 않아 임시 데이터 반환중.",
-            "examples": {
-              "application/json": {
-                "success": "true",
-                "data": [{ "title": "book1" }, { "title": "book2" }]
-              }
-            }
-          }
-        }
-      }
-    },
-    "/book/{bookId}": {
-      "get": {
-        "tags": ["BOOK"],
-        "description": "책 정보 조회",
-        "parameters": [
-          {
-            "name": "bookId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "책 정보 조회 성공",
-            "examples": {
-              "application/json": {
-                "success": "true",
-                "msg": "책 정보 조회 성공",
-                "data": {
-                  "title": "책 제목",
-                  "author": "작가이름",
-                  "price": "책 가격",
-                  "detail": "기타 설명"
-                }
-              }
-            }
-          },
-          "302": {
-            "description": "책 정보 조회 실패"
-          }
-        }
-      }
-    }
-  },
-  "definitions": {},
-  "definition": {
-    "openapi": "3.0.0",
+    "swagger": "2.0",
     "info": {
-      "title": "도서추천서비스 API",
-      "version": "0.1.0",
-      "description": "익스프레스로 만들어진 간단한 CRUD api",
-      "license": {
-        "name": "MIT",
-        "url": "https://spdx.org/licenses/MIT.html"
-      },
-      "contact": {
-        "name": "도서추천서비스",
-        "url": "http://localhost:3000",
-        "email": "brill_be@naver.com"
-      }
-    }
-  },
-  "apis": [
-    "./routes/auth.js",
-    "./routes/book.js",
-    "./routes/recommendation.js",
-    "./routes/user.js",
-    "./routes/wishlist.js"
-  ]
+        "version": "1.0.0",
+        "title": "REST API",
+        "description": ""
+    },
+    "host": "localhost:5000",
+    "basePath": "/",
+    "tags": [
+        { "name": "AUTH", "description": "회원가입/로그인/인증관련 endpoint" },
+        { "name": "BOOK", "description": "책 정보 호출 endpoint" },
+        {
+            "name": "RECOMMENDATION",
+            "description": "검색/키워드 선택 관련 endpoint"
+        },
+        { "name": "USER", "description": "마이페이지 관련 endpoint" },
+        { "name": "WISHLIST", "description": "장바구니 추가/삭제 endpoint" }
+    ],
+    "schemes": ["http"],
+    "consumes": [],
+    "produces": [],
+    "paths": {
+        "/auth/": {
+            "get": {
+                "tags": ["AUTH"],
+                "description": "정상적으로 서버 실행중인지 테스트할 수 있는 리퀘스트. 응답으로 'Auth Router test'가 오면 정상",
+                "parameters": [],
+                "responses": {}
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "tags": ["AUTH"],
+                "description": "회원가입. parameter와 함께 보내면 해당 정보로 회원 등록이 됨",
+                "parameters": [
+                    {
+                        "name": "obj",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "example": "test@email.com"
+                                },
+                                "nickname": {
+                                    "example": "닉네임"
+                                },
+                                "password": {
+                                    "example": "비번"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "회원가입 성공",
+                        "examples": {
+                            "application/json": {
+                                "success": true
+                            }
+                        }
+                    },
+
+                    "302": {
+                        "description": "db생성에 실패"
+                    },
+                    "404": {
+                        "description": "중복 이메일 존재"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": ["AUTH"],
+                "description": "파라미터로 아이디(이메일), 비번보내면 로그인",
+                "parameters": [
+                    {
+                        "name": "obj",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "example": "test@email.com"
+                                },
+                                "password": {
+                                    "example": "비번"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "로그인 성공",
+                        "examples": {
+                            "application/json": {
+                                "success": "true",
+                                "userData": { "id": "user아이디(이메일)", "nickname": "닉네임" }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "패스워드 불일치"
+                    },
+                    "401": {
+                        "description": "회원이 존재하지 않음"
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "get": {
+                "tags": ["AUTH"],
+                "description": "로그아웃. 아무것도 보낼 필요 없이 해당 요청만 보내면 됨",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "로그아웃 성공, 토큰을 삭제함",
+                        "examples": {
+                            "application/json": {
+                                "success": "true"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "잘못된 토큰. 해당 유저 없음."
+                    },
+                    "500": {
+                        "description": "토큰 해석 실패"
+                    },
+                    "501": {
+                        "description": "저장된 토큰 없음. 로그인 풀리게 하면 됨"
+                    }
+                }
+            }
+        },
+        "/auth/status": {
+            "get": {
+                "tags": ["AUTH"],
+                "description": "로그인 상태 확인(토큰을 이용해 정상 로그인 중인지 확인)",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "정상 로그인 확인 성공",
+                        "examples": {
+                            "application/json": {
+                                "success": "true",
+                                "userData": { "id": "user아이디(이메일)", "nickname": "닉네임" }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "잘못된 토큰. 해당 유저 없음."
+                    },
+                    "500": {
+                        "description": "토큰 해석 실패"
+                    },
+                    "501": {
+                        "description": "저장된 토큰 없음. 로그인 풀리게 하면 됨"
+                    }
+                }
+            }
+        },
+        "/user/": {
+            "get": {
+                "tags": ["USER"],
+                "description": "사용자 마이페이지. 사용자의 장바구니 목록과 검색 키워드 기록 목록 반환",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "성공",
+                        "examples": {
+                            "application/json": {
+                                "success": "true",
+                                "wishlists": ["위시리스트 도서 id1", "위시리스트 도서 id2"],
+                                "searchkeywords": ["키워드1", "키워드2"]
+                            }
+                        }
+                    },
+                    "302": {
+                        "description": "db조회 실패"
+                    },
+                    "400": {
+                        "description": "잘못된 토큰. 해당 유저 없음."
+                    },
+                    "500": {
+                        "description": "토큰 해석 실패"
+                    },
+                    "501": {
+                        "description": "저장된 토큰 없음. 로그인 풀리게 하면 됨"
+                    }
+                }
+            }
+        },
+        "/wishlist/{id}": {
+            "get": {
+                "tags": ["WISHLIST"],
+                "description": "파라미터로 전달한 id에 해당하는 도서를 장바구니에서 추가",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "위시리스트에 추가 성공",
+                        "examples": {
+                            "application/json": {
+                                "success": "true",
+                                "msg": "찜을 성공했습니다."
+                            }
+                        }
+                    },
+                    "302": {
+                        "description": "Found"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "501": {
+                        "description": "Not Implemented"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["WISHLIST"],
+                "description": "파라미터로 전달한 id값에 해당하는 도서를 장바구니에서 삭제",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "찜 삭제 성공",
+                        "examples": {
+                            "application/json": {
+                                "success": "true",
+                                "msg": "찜 삭제를 성공했습니다."
+                            }
+                        }
+                    },
+                    "302": {
+                        "description": "Found"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "501": {
+                        "description": "Not Implemented"
+                    }
+                }
+            }
+        },
+        "/recommendation/{searchKeyword}": {
+            "get": {
+                "tags": ["RECOMMENDATION"],
+                "description": "제일 처음 메인페이지에서의 검색. 키워드/책 제목을 검색했을 때 요청은 여기로",
+                "parameters": [
+                    {
+                        "name": "searchKeyword",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "검색 성공",
+                        "examples": {
+                            "application/json": {
+                                "success": "true",
+                                "keywords": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"]
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "잘못된 토큰. 토큰에 해당하는 유저가 없음"
+                    },
+                    "500": {
+                        "description": "토큰 해석에 실패"
+                    }
+                }
+            }
+        },
+        "/recommendation/keywords": {
+            "post": {
+                "tags": ["RECOMMENDATION"],
+                "description": "키워드 선택. 선택한 키워드를 리스트에 담아서 보내주세요",
+                "parameters": {
+                    "name": "keywords",
+                    "in": "path",
+                    "required": true,
+                    "type": "array"
+                },
+                "responses": {
+                    "200": {
+                        "description": "키워드 선택해서 추천 성공, 아직 추천 결과와 연결되지 않아 임시 데이터 반환중.",
+                        "examples": {
+                            "application/json": {
+                                "success": "true",
+                                "data": [{ "title": "book1" }, { "title": "book2" }]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/book/{bookId}": {
+            "get": {
+                "tags": ["BOOK"],
+                "description": "책 정보 조회",
+                "parameters": [
+                    {
+                        "name": "bookId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "책 정보 조회 성공",
+                        "examples": {
+                            "application/json": {
+                                "success": "true",
+                                "msg": "책 정보 조회 성공",
+                                "data": {
+                                    "title": "책 제목",
+                                    "author": "작가이름",
+                                    "price": "책 가격",
+                                    "detail": "기타 설명"
+                                }
+                            }
+                        }
+                    },
+                    "302": {
+                        "description": "책 정보 조회 실패"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {},
+    "definition": {
+        "openapi": "3.0.0",
+        "info": {
+            "title": "도서추천서비스 API",
+            "version": "0.1.0",
+            "description": "익스프레스로 만들어진 간단한 CRUD api",
+            "license": {
+                "name": "MIT",
+                "url": "https://spdx.org/licenses/MIT.html"
+            },
+            "contact": {
+                "name": "도서추천서비스",
+                "url": "http://localhost:3000",
+                "email": "brill_be@naver.com"
+            }
+        }
+    },
+    "apis": [
+        "./routes/auth.js",
+        "./routes/book.js",
+        "./routes/recommendation.js",
+        "./routes/user.js",
+        "./routes/wishlist.js"
+    ]
 }
