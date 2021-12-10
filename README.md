@@ -3,6 +3,12 @@
 
 
 ## 의존성 및 설치 방법
+* 용량이 큰 파일은 git에 올리지 않았음.
+* 모델( checkpoint-1200 ) 파일은 다운로드 받아서 server/celery/model/ 위치에 넣어주어야 함
+* tfidf 매트릭스 파일도 다운로드받아 sever/celery/model폴더에 넣어주어야 함.
+* .env파일을 server/env파일에 생성해주어야 함.(key 내용 문의 :  bebus1998@naver.com)
+
+
 [정환추가]
 [정은추가]
 
