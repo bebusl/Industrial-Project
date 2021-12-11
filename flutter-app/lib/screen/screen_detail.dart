@@ -57,13 +57,17 @@ class _DetailScreen extends State<DetailScreen> {
                         child: Text(snapshot.data!.title.toString(),
                             style: const TextStyle(fontSize: 30))),
                     Container(
-                        margin: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                        child: Text(snapshot.data!.author.toString(),
+                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        child: Text(snapshot.data!.intro.toString(),
                             style: const TextStyle(fontSize: 20))),
                     Container(
                         margin: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                        child: Text(snapshot.data!.author.toString(),
+                            style: const TextStyle(fontSize: 25))),
+                    Container(
+                        margin: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                         child: Text(snapshot.data!.price.toString() + "원",
-                            style: const TextStyle(fontSize: 20))),
+                            style: const TextStyle(fontSize: 25))),
                   ]);
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
