@@ -4,23 +4,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mypage">
+    tools:context=".my_page"
+    android:background="@drawable/basic">
+
+
+    <Button
+        android:id="@+id/button14"
+        android:layout_width="370dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="151dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/btn1"
+        android:onClick="Click1"
+        android:text="내정보"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/button12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button12"
-        android:layout_width="411dp"
-        android:layout_height="79dp"
+        android:layout_width="370dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="405dp"
+        android:background="@drawable/btn1"
         android:onClick="Click1"
         android:text="찜하기"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="258dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button14" />
 
     <Button
         android:id="@+id/button10"
-        android:layout_width="411dp"
-        android:layout_height="79dp"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/btn1"
         android:onClick="Click2"
-        android:text="검색목록"
+        android:text="검색기록"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="337dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.526" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
