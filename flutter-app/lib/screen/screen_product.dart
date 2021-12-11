@@ -77,7 +77,11 @@ class _ProductScreen extends State<ProductScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => DetailScreen(
-                                            bookId: snapshot.data![index].id)));
+                                              bookId: snapshot.data![index].id,
+                                              tempCover: snapshot
+                                                  .data![index].cover
+                                                  .toString(),
+                                            )));
                               },
                               child: Container(
                                   margin:
