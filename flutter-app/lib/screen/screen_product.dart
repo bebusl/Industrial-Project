@@ -56,10 +56,9 @@ class _ProductScreen extends State<ProductScreen> {
         },
         child: SafeArea(
             child: Scaffold(
-                backgroundColor: const Color.fromRGBO(0xF8, 0xFF, 0xEA, 1),
                 appBar: AppBar(
-                    title: const Text("My Test APP"),
-                    backgroundColor: Colors.blue,
+                    title: const Text("키북키북"),
+                    backgroundColor: const Color.fromRGBO(0x78, 0x5D, 0x12, 1),
                     leading: Container()),
                 body: Center(
                     child: FutureBuilder<List<Product>>(
@@ -161,7 +160,7 @@ class _ProductScreen extends State<ProductScreen> {
                     }
 
                     return const CircularProgressIndicator(
-                      color: Colors.blue,
+                      color: Color.fromRGBO(0x78, 0x5D, 0x12, 1),
                     );
                   },
                 )),
@@ -171,7 +170,7 @@ class _ProductScreen extends State<ProductScreen> {
                         MaterialPageRoute(builder: (context) => HomeScreen()));
                   },
                   child: const Icon(Icons.arrow_back),
-                  backgroundColor: Colors.blue,
+                  backgroundColor: const Color.fromRGBO(0x78, 0x5D, 0x12, 1),
                 ))));
   }
 }

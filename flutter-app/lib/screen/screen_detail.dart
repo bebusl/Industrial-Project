@@ -44,10 +44,9 @@ class _DetailScreen extends State<DetailScreen> {
 
     return SafeArea(
         child: Scaffold(
-            backgroundColor: const Color.fromRGBO(0xF8, 0xFF, 0xEA, 1),
             appBar: AppBar(
-                title: const Text("My Test APP"),
-                backgroundColor: Colors.blue,
+                title: const Text("키북키북"),
+                backgroundColor: const Color.fromRGBO(0x78, 0x5D, 0x12, 1),
                 leading: Container()),
             body: Center(
                 child: FutureBuilder<Detail>(
@@ -97,7 +96,7 @@ class _DetailScreen extends State<DetailScreen> {
                     MaterialPageRoute(builder: (context) => HomeScreen()));
               },
               child: const Icon(Icons.arrow_back),
-              backgroundColor: Colors.blue,
+              backgroundColor: const Color.fromRGBO(0x78, 0x5D, 0x12, 1),
             )));
   }
 }

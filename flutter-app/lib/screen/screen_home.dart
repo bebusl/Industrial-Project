@@ -42,10 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
         onWillPop: _onWillPop,
         child: SafeArea(
             child: Scaffold(
-          backgroundColor: const Color.fromRGBO(0xF8, 0xFF, 0xEA, 1),
           appBar: AppBar(
-              title: const Text("My Test APP"),
-              backgroundColor: Colors.blue,
+              title: const Text("키북키북"),
+              backgroundColor: const Color.fromRGBO(0x78, 0x5D, 0x12, 1),
               leading: Container()),
           body: Center(
               child: Column(
@@ -69,35 +68,44 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   width: width * 0.8,
                   child: TextField(
+                    cursorColor: const Color.fromRGBO(0x78, 0x5D, 0x12, 1),
+                    style: const TextStyle(
+                        color: Color.fromRGBO(0x78, 0x5D, 0x12, 1)),
                     onChanged: (text) {
                       setState(() {
                         searchKeyword = text;
                       });
                     },
                     decoration: const InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      border: OutlineInputBorder(),
-                      labelText: '찾고싶은 책의 키워드를 입력하세요.',
-                    ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(0x78, 0x5D, 0x12, 1)),
+                        ),
+                        border: OutlineInputBorder(),
+                        labelText: '찾고싶은 책의 키워드를 입력하세요.',
+                        labelStyle: TextStyle(
+                            color: Color.fromRGBO(0x78, 0x5D, 0x12, 1))),
                   ),
                 ),
                 SizedBox(
                     width: width * 0.8,
                     child: ElevatedButton.icon(
                       style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        )),
-                      ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            //side: BorderSide(color: Colors.red) // border line color
+                          )),
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith((states) {
+                            return const Color.fromRGBO(0x78, 0x5D, 0x12, 1);
+                          })),
                       onPressed: () {
                         Navigator.push(
                             context,

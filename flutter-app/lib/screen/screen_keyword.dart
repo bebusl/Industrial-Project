@@ -56,10 +56,9 @@ class _KeywordScreen extends State<KeywordScreen> {
         },
         child: SafeArea(
             child: Scaffold(
-                backgroundColor: const Color.fromRGBO(0xF8, 0xFF, 0xEA, 1),
                 appBar: AppBar(
-                    title: const Text("My Test APP"),
-                    backgroundColor: Colors.blue,
+                    title: const Text("키북키북"),
+                    backgroundColor: const Color.fromRGBO(0x78, 0x5D, 0x12, 1),
                     leading: Container()),
                 body: Center(
                     child: FutureBuilder<Keyword>(
@@ -90,7 +89,8 @@ class _KeywordScreen extends State<KeywordScreen> {
                                         style: ButtonStyle(backgroundColor:
                                             MaterialStateProperty.resolveWith(
                                                 (states) {
-                                          return Colors.blue;
+                                          return const Color.fromRGBO(
+                                              0x78, 0x5D, 0x12, 1);
                                         })),
                                         onPressed: () {
                                           setState(() {
@@ -168,13 +168,21 @@ class _KeywordScreen extends State<KeywordScreen> {
                                     },
                                     child: const Text(
                                       "초기화",
-                                      style: TextStyle(color: Colors.blue),
+                                      style: TextStyle(
+                                          color: Color.fromRGBO(
+                                              0x78, 0x5D, 0x12, 1)),
                                     )),
                               ),
                               const Padding(padding: EdgeInsets.all(10)),
                               SizedBox(
                                   width: width * 0.35,
                                   child: ElevatedButton(
+                                      style: ButtonStyle(backgroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) {
+                                        return const Color.fromRGBO(
+                                            0x78, 0x5D, 0x12, 1);
+                                      })),
                                       onPressed: () {
                                         List<String> keywords_ = [];
                                         for (int i = 0;
@@ -200,7 +208,7 @@ class _KeywordScreen extends State<KeywordScreen> {
                     }
 
                     return const CircularProgressIndicator(
-                      color: Colors.blue,
+                      color: Color.fromRGBO(0x78, 0x5D, 0x12, 1),
                     );
                   },
                 )),
@@ -210,7 +218,7 @@ class _KeywordScreen extends State<KeywordScreen> {
                         MaterialPageRoute(builder: (context) => HomeScreen()));
                   },
                   child: const Icon(Icons.arrow_back),
-                  backgroundColor: Colors.blue,
+                  backgroundColor: const Color.fromRGBO(0x78, 0x5D, 0x12, 1),
                 ))));
   }
 }
