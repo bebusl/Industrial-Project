@@ -92,8 +92,7 @@ class _DetailScreen extends State<DetailScreen> {
             )),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()));
+                Navigator.of(context).pop(true);
               },
               child: const Icon(Icons.arrow_back),
               backgroundColor: const Color.fromRGBO(0x78, 0x5D, 0x12, 1),
