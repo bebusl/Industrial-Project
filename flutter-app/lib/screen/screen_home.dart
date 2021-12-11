@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 0, height * 0.03),
                     child: const Center(
-                        child: Text("책 추천 받아라.",
+                        child: Text("저격당하실분?",
                             style: TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 0, height * 0.1),
                     child: const Center(
-                        child: Text("키워드 기반 책 추천 서비스.",
+                        child: Text("도서 취향 저격..",
                             style:
                                 TextStyle(fontSize: 15, color: Colors.grey)))),
                 SizedBox(
