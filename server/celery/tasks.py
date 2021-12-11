@@ -71,8 +71,9 @@ def find_books(searchKeyword):
 
     simScore = simScore[0:len(simScore)]
     books = [i[0] for i in simScore]
-    print(books[0:10] if len(books)>10 else books)
-    result = books[0:10] if len(books)>10 else books
+  
+    #print(books[0:10] if len(books)>10 else books)
+    result = books[0:20] if len(books)>20 else books
     return result
         
 @app.task
