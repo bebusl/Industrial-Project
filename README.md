@@ -9,7 +9,6 @@
 * .env파일을 server/env파일에 생성해주어야 함.(key 내용 문의 :  bebus1998@naver.com)
 
 
-[정환추가]
 [정은추가]
 
 --------------------------------
@@ -28,6 +27,10 @@
 'npm i'
 'pip install -r requirements.txt'
 
+--------------------------------
+### flutter-app
+[flutter install](https://docs.flutter.dev/get-started/install)
+
 ## 실행방법(development)
 ### api 서버 오픈
 ```
@@ -35,8 +38,14 @@ cd server
 npm i
 npm run dev
 ```
+
+### flutter app 빌드
+```
+cd flutter-app
+flutter build apk (android)
+flutter build ios (ios)
+```
 [정은 추가]
-[정환 추가]
 
 
 ## 라이센스
