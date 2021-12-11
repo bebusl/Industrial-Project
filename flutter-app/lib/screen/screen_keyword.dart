@@ -106,9 +106,10 @@ class _KeywordScreen extends State<KeywordScreen> {
                         IconButton(
                             onPressed: () {
                               List<String> keywords_ = [];
-                              selectedKeyword.map((index) {
-                                keywords_.add(oriKeyword.keywords[index]);
-                              });
+                              for (int i = 0; i < selectedKeyword.length; i++) {
+                                keywords_.add(
+                                    oriKeyword.keywords[selectedKeyword[i]]);
+                              }
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
