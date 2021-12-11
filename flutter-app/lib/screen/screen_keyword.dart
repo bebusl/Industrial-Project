@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:app/model/model_keyword.dart';
 import 'package:app/screen/screen_home.dart';
 import 'package:app/screen/screen_product.dart';
@@ -35,6 +36,12 @@ class _KeywordScreen extends State<KeywordScreen> {
       });
       var result = Keyword.fromJson(json.decode(utf8.decode(res.bodyBytes)));
       oriKeyword = result;
+      if (oriKeyword.books.isEmpty) {
+        Timer(const Duration(milliseconds: 2000), () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        });
+      }
       return result;
     } else {
       throw Exception('Failed to load post');
