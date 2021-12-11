@@ -5,7 +5,7 @@
         "title": "REST API",
         "description": ""
     },
-    "host": "localhost:5000",
+    "host": "110.13.200.51:5000",
     "basePath": "/",
     "tags": [
         { "name": "AUTH", "description": "회원가입/로그인/인증관련 endpoint" },
@@ -302,13 +302,35 @@
         "/recommendation/keywords": {
             "post": {
                 "tags": ["RECOMMENDATION"],
-                "description": "키워드 선택. 선택한 키워드를 리스트에 담아서 보내주세요",
-                "parameters": {
-                    "name": "keywords",
-                    "in": "path",
-                    "required": true,
-                    "type": "array"
-                },
+                "description": "키워드 선택. 선택한 키워드를 리스트에 담아서 보내주세요. index 0이 우선순위 1순위, 1이 우선순위 2순위,,,이런식으로 순차적으로 담아서 보냅니다.  /recomemndatiaon/keywords 의 응답으로 받은 book 을 꼭 같이 다시 보내주세요!!!!!!",
+                "parameters": [
+                    {
+                        "name": "obj",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "keywords": {
+                                    "example": ["으로", "실제", "프", "전"]
+                                },
+                                "books": {
+                                    "example": [
+                                        "61b32d2516d501c9265e1b5e",
+                                        "61b32d2516d501c9265e1c43",
+                                        "61b32d2516d501c9265e1cc2",
+                                        "61b32d2516d501c9265e1e12",
+                                        "61b32d2516d501c9265e1e1e",
+                                        "61b32d2516d501c9265e23fe",
+                                        "61b32d2516d501c9265e27b3",
+                                        "61b32d2616d501c9265e2ddd",
+                                        "61b32d2616d501c9265e2ff8",
+                                        "61b32d2616d501c9265e30ab"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "키워드 선택해서 추천 성공, 아직 추천 결과와 연결되지 않아 임시 데이터 반환중.",

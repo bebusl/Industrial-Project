@@ -1,0 +1,10 @@
+torch==1.8.0
+numpy
+transformers==4.1.1
+tqdm==4.32.1
+emoji
+soynlp
+python-dotenv
+pymongo==3.11.0
+tweepy==3.10.0
+konlpy
