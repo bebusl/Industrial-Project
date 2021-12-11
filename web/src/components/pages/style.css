@@ -1,0 +1,11 @@
+.contents-wrapper {
+    display: grid;
+    align-items: center;
+    grid-template-rows: 2fr 1fr 4fr;
+    place-items: center;
+    place-content: center;
+    width: 100vw;
+    height: 80vh;
+    flex-direction: column;
+    background-color: #f1ffdf;
+}
