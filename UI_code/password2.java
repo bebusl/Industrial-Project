@@ -1,12 +1,11 @@
-package com.example.push_book;
+package com.example.book_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.push_book.ui.login.LoginActivity;
-import android.content.Intent;
 public class password2 extends AppCompatActivity {
 
     @Override
@@ -15,9 +14,10 @@ public class password2 extends AppCompatActivity {
         setContentView(R.layout.activity_password2);
     }
     public void onClick(View view){
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, login.class);
         startActivity(intent);
 
         finish();
     }
+
 }
