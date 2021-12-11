@@ -5,8 +5,12 @@ class Keyword {
   Keyword({required this.keywords, required this.books});
 
   factory Keyword.fromJson(Map<String, dynamic> json) {
-    return Keyword(
-        keywords: json['keywords'].cast<String>(),
-        books: json['books'].cast<String>());
+    try {
+      return Keyword(
+          keywords: json['keywords'].cast<String>(),
+          books: json['books'].cast<String>());
+    } on Error catch (_, ex) {
+      return Keyword(keywords: [], books: []);
+    }
   }
 }
