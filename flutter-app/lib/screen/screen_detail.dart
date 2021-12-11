@@ -6,7 +6,8 @@ import 'dart:convert';
 
 class DetailScreen extends StatefulWidget {
   late String bookId;
-  DetailScreen({required this.bookId});
+  String tempCover;
+  DetailScreen({required this.bookId, required this.tempCover});
 
   @override
   _DetailScreen createState() => _DetailScreen();
@@ -26,8 +27,8 @@ class _DetailScreen extends State<DetailScreen> {
         .get(Uri.parse('http://110.13.200.51:5000/book/' + widget.bookId));
 
     if (res.statusCode == 200) {
-      var result =
-          Detail.fromJson(json.decode(utf8.decode(res.bodyBytes))['data']);
+      var result = Detail.fromJson(
+          json.decode(utf8.decode(res.bodyBytes))['data']['book_info']);
       return result;
     } else {
       throw Exception('Failed to load post');
@@ -51,24 +52,31 @@ class _DetailScreen extends State<DetailScreen> {
               future: detail,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Column(children: [
-                    Container(
-                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        child: Text(snapshot.data!.title.toString(),
-                            style: const TextStyle(fontSize: 30))),
-                    Container(
-                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        child: Text(snapshot.data!.intro.toString(),
-                            style: const TextStyle(fontSize: 20))),
-                    Container(
-                        margin: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                        child: Text(snapshot.data!.author.toString(),
-                            style: const TextStyle(fontSize: 25))),
-                    Container(
-                        margin: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                        child: Text(snapshot.data!.price.toString() + "원",
-                            style: const TextStyle(fontSize: 25))),
-                  ]);
+                  return Container(
+                      margin: EdgeInsets.fromLTRB(
+                          width * 0.05, height * 0.05, width * 0.05, 0),
+                      child: Column(children: [
+                        SizedBox(
+                            width: width * 0.6,
+                            child: Image.network(widget.tempCover)),
+                        Padding(padding: EdgeInsets.all(height * 0.02)),
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            child: Text(snapshot.data!.title.toString(),
+                                style: const TextStyle(fontSize: 30))),
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            child: Text(snapshot.data!.intro.toString(),
+                                style: const TextStyle(fontSize: 20))),
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                            child: Text(snapshot.data!.author.toString(),
+                                style: const TextStyle(fontSize: 25))),
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                            child: Text(snapshot.data!.price.toString() + "원",
+                                style: const TextStyle(fontSize: 25))),
+                      ]));
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 }
