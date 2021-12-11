@@ -1,11 +1,8 @@
-package com.example.push_book;
+package com.example.book_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.View;
-
-import com.example.push_book.ui.login.LoginActivity;
 
 public class result extends AppCompatActivity {
 
@@ -14,5 +11,4 @@ public class result extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
     }
-
 }
