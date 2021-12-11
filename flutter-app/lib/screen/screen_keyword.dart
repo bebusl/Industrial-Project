@@ -156,13 +156,12 @@ class _KeywordScreen extends State<KeywordScreen> {
                 );
               },
             )),
-            floatingActionButton: FloatingActionButton.extended(
+            floatingActionButton: FloatingActionButton(
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => HomeScreen()));
               },
-              label: const Text('뒤로가기'),
-              icon: const Icon(Icons.arrow_back),
+              child: const Icon(Icons.arrow_back),
               backgroundColor: Colors.purple,
             )));
   }
