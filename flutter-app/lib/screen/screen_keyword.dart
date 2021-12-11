@@ -57,6 +57,9 @@ class _KeywordScreen extends State<KeywordScreen> {
               future: keyword,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  if (snapshot.data!.books.isEmpty) {
+                    return const Text("결과가 존재하지 않습니다.");
+                  }
                   return Column(children: [
                     Container(
                         margin: EdgeInsets.fromLTRB(
