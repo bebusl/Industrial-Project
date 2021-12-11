@@ -236,23 +236,20 @@ def analysis(model, dataloader, evaluate_label_ids, total_words):
     return result
 
 @app.task
-def analysis_(books):
+def analysis_(book):
+    if (not bool(book.get('reviews'))):            
+        return [[],[]] 
     result_ = []
-    keywords = []
-    print(books)
-    for book in books:
-        reviewList = []
-        if (not bool(book.get('reviews'))):            
-            continue
-       
-        ## 여기서부터 전처리. 이 밑이 그럼 모델에 넣어서 분석하는 곳!
-        reviews = book.get('reviews')
-        _id = book.get('_id')
-        data=[]
-        for review in reviews:
-            review = re.sub('<.+?> *', '', str(review))
-            review = re.sub('[^A-Za-z0-9가-힣x ]', '', review)
-            review = ' '.join(review.split())
+    keywords = []    
+    ## 여기서부터 전처리. 이 밑이 그럼 모델에 넣어서 분석하는 곳!
+    reviews = book.get('reviews')
+    _id = book.get('_id')
+    data=[]
+    for review in reviews:
+        review = re.sub('<.+?> *', '', str(review))
+        review = re.sub('[^A-Za-z0-9가-힣x ]', '', review)
+        review = ' '.join(review.split())
+        try:
             for i in kss.split_sentences(review):
                 if len(i) < 20:
                     continue
@@ -264,7 +261,16 @@ def analysis_(books):
 
                 result = analysis(model, dataloader,
                                         evaluate_label_ids, total_words)
-                keywords.extend(list(result.keys()))
+                if(len(result)==0):
+                    result={}
+                
+                if(len(result)>0):
+                    keywords.extend(list(result.keys()))
+            
+            
                 result_.append({"bookId":_id,"review":i,"analysis":result})
+        except:
+            pass
+        
     return [result_, keywords]  
 

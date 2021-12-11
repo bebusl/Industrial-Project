@@ -24,12 +24,24 @@ router.get("/:searchKeyword", async (req, res) => {
 
         //arr = [get_keywords(result)];
         let books = objectIds.map((cur) => cur[0]);
-        const result_ = await get_keywords(result);
-        Review.insertMany(result_[0]);
+        arr = [];
+        for (let i in result) {
+            arr.push(get_keywords(result[i]));
+        }
+        const result_ = await Promise.all(arr);
+
+        let keywords = [];
+        let reviews = [];
+        for (let i in result_) {
+            reviews = reviews.concat(result_[i][0]);
+            keywords = keywords.concat(result_[i][1]);
+        }
+        //const result_ = await get_keywords(result);
+        Review.insertMany(reviews);
 
         return res.json({
             success: true,
-            keywords: result_[1],
+            keywords: [...new Set(keywords)],
             books: books,
         });
     } catch (e) {
@@ -57,6 +69,7 @@ router.get("/:searchKeyword", async (req, res) => {
 router.post("/keywords", async (req, res) => {
     //[1순위,2순위,3순위,4순위,5순위]이렇게 해서 보내주기!
     const { books, keywords } = req.body;
+
     let datas = await Review.find({ bookId: { $in: books } }, { _id: 0, bookId: 1, analysis: 1 });
     let score = books.reduce((re, cur) => {
         re[cur] = keywords.reduce((re, cur) => {
@@ -120,7 +133,7 @@ router.post("/keywords", async (req, res) => {
     return res.json({
         success: true,
         data: msg,
-    }); //임시 response
+    });
 });
 
 module.exports = router;
