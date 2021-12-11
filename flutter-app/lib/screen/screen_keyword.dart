@@ -18,7 +18,6 @@ class _KeywordScreen extends State<KeywordScreen> {
   List<int> selectedKeyword = [];
   late Future<Keyword> keyword;
   late Keyword oriKeyword;
-  bool isLoading = false;
 
   @override
   void initState() {
@@ -31,9 +30,6 @@ class _KeywordScreen extends State<KeywordScreen> {
         'http://110.13.200.51:5000/recommendation/' + widget.searchKeyword));
 
     if (res.statusCode == 200) {
-      setState(() {
-        isLoading = true;
-      });
       var result = Keyword.fromJson(json.decode(utf8.decode(res.bodyBytes)));
       oriKeyword = result;
       if (oriKeyword.books.isEmpty) {
