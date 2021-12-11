@@ -1,4 +1,5 @@
 import 'package:app/model/model_keyword.dart';
+import 'package:app/screen/screen_home.dart';
 import 'package:app/screen/screen_product.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -147,6 +148,15 @@ class _KeywordScreen extends State<KeywordScreen> {
                   color: Colors.deepPurple,
                 );
               },
-            ))));
+            )),
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()));
+              },
+              label: const Text('뒤로가기'),
+              icon: const Icon(Icons.arrow_back),
+              backgroundColor: Colors.purple,
+            )));
   }
 }
