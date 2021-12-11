@@ -66,7 +66,10 @@ class _DetailScreen extends State<DetailScreen> {
                                 style: const TextStyle(fontSize: 30))),
                         Container(
                             margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            child: Text(snapshot.data!.intro.toString(),
+                            child: Text(
+                                snapshot.data!.intro.isEmpty
+                                    ? "책 소개가 존재하지 않습니다."
+                                    : snapshot.data!.intro.toString(),
                                 style: const TextStyle(fontSize: 20))),
                         Container(
                             margin: const EdgeInsets.fromLTRB(5, 5, 5, 5),
