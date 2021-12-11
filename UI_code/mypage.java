@@ -1,4 +1,4 @@
-package com.example.push_book;
+package com.example.book_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-public class mypage extends AppCompatActivity {
+public class my_page extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mypage);
+        setContentView(R.layout.activity_my_page);
     }
     public void Click1(View view){
         Intent intent = new Intent(this, wish_list.class);
