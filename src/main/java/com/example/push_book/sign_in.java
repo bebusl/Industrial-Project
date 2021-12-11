@@ -8,7 +8,7 @@ import android.view.View;
 import com.example.push_book.ui.login.LoginActivity;
 import android.content.Intent;
 
-public class sing_in extends AppCompatActivity {
+public class sign_in extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
