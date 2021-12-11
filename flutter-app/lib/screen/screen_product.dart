@@ -1,5 +1,6 @@
 import 'package:app/model/model_product.dart';
 import 'package:app/screen/screen_detail.dart';
+import 'package:app/screen/screen_home.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -49,86 +50,127 @@ class _ProductScreen extends State<ProductScreen> {
     double width = screenSize.width;
     double height = screenSize.height;
 
-    return SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-                title: const Text("My Test APP"),
-                backgroundColor: Colors.deepPurple,
-                leading: Container()),
-            body: Center(
-                child: FutureBuilder<List<Product>>(
-              future: products,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Column(children: [
-                    Container(
-                        margin: const EdgeInsets.all(15),
-                        child: const Text("추천 도서",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 40,
-                            ))),
-                    Expanded(
-                      child: ListView.separated(
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => DetailScreen(
-                                            bookId: snapshot.data![index].id)));
-                              },
-                              child: Container(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                  child: Column(children: <Widget>[
-                                    SizedBox(
-                                        width: width * 0.4,
-                                        child: Image.network(snapshot
-                                            .data![index].cover
-                                            .toString())),
-                                    Container(
-                                        margin: const EdgeInsets.fromLTRB(
-                                            10, 10, 10, 10),
-                                        child: Text(
-                                            snapshot.data![index].title
-                                                .toString(),
-                                            style:
-                                                const TextStyle(fontSize: 30))),
-                                    Container(
-                                        margin: const EdgeInsets.fromLTRB(
-                                            5, 5, 5, 5),
-                                        child: Text(
-                                            snapshot.data![index].author
-                                                .toString(),
-                                            style:
-                                                const TextStyle(fontSize: 20))),
-                                    Container(
-                                        margin: const EdgeInsets.fromLTRB(
-                                            5, 5, 5, 5),
-                                        child: Text(
-                                            snapshot.data![index].price
-                                                    .toString() +
-                                                "원",
-                                            style:
-                                                const TextStyle(fontSize: 20))),
-                                  ])));
-                        },
-                        itemCount: snapshot.data!.length,
-                        separatorBuilder: (BuildContext context, int index) =>
-                            const Divider(),
-                      ),
-                    )
-                  ]);
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
+    return WillPopScope(
+        onWillPop: () {
+          return Future(() => false);
+        },
+        child: SafeArea(
+            child: Scaffold(
+                appBar: AppBar(
+                    title: const Text("키북키북"),
+                    backgroundColor: const Color.fromRGBO(0x78, 0x5D, 0x12, 1),
+                    leading: Container()),
+                body: Center(
+                    child: FutureBuilder<List<Product>>(
+                  future: products,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(children: [
+                        Container(
+                            alignment: Alignment.centerLeft,
+                            margin: const EdgeInsets.fromLTRB(30, 15, 15, 15),
+                            child: const Text("추천 도서",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 35,
+                                ))),
+                        Expanded(
+                          child: ListView.separated(
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => DetailScreen(
+                                                  bookId:
+                                                      snapshot.data![index].id,
+                                                  tempCover: snapshot
+                                                      .data![index].cover
+                                                      .toString(),
+                                                )));
+                                  },
+                                  child: Container(
+                                      margin: const EdgeInsets.fromLTRB(
+                                          10, 10, 10, 10),
+                                      child: Row(children: <Widget>[
+                                        SizedBox(
+                                            width: width * 0.3,
+                                            //height: height * 0.10,
+                                            child: Image.network(snapshot
+                                                .data![index].cover
+                                                .toString())),
+                                        Container(
+                                            height: height * 0.15,
+                                            margin: EdgeInsets.fromLTRB(
+                                                width * 0.05,
+                                                height * 0.01,
+                                                0,
+                                                0),
+                                            width: width * 0.5,
+                                            child: Column(children: [
+                                              Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                      snapshot
+                                                          .data![index].title
+                                                          .toString(),
+                                                      style: const TextStyle(
+                                                          fontSize: 15,
+                                                          fontWeight: FontWeight
+                                                              .bold))),
+                                              Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      0,
+                                                      height * 0.01,
+                                                      0,
+                                                      height * 0.01),
+                                                  child: Text(
+                                                      snapshot
+                                                          .data![index].author
+                                                          .toString(),
+                                                      style: const TextStyle(
+                                                          fontSize: 15))),
+                                              Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                      snapshot.data![index]
+                                                              .price
+                                                              .toString() +
+                                                          "원",
+                                                      style: const TextStyle(
+                                                          fontSize: 15)))
+                                            ]))
+                                      ])));
+                            },
+                            itemCount: snapshot.data!.length,
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const Divider(),
+                          ),
+                        )
+                      ]);
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
 
-                return const CircularProgressIndicator(
-                  color: Colors.deepPurple,
-                );
-              },
-            ))));
+                    return const CircularProgressIndicator(
+                      color: Color.fromRGBO(0x78, 0x5D, 0x12, 1),
+                    );
+                  },
+                )),
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                  },
+                  child: const Icon(Icons.arrow_back),
+                  backgroundColor: const Color.fromRGBO(0x78, 0x5D, 0x12, 1),
+                ))));
   }
 }
