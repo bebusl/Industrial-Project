@@ -29,7 +29,9 @@
 
 ### api server
 *  의존성
-      ```  "bcryptjs": "^2.4.3",
+      ```
+      //for server
+      "bcryptjs": "^2.4.3",
         "body-parser": "^1.19.0",
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
@@ -39,7 +41,19 @@
         "mongoose": "^6.0.11",
         "nodemon": "^2.0.13",
         "swagger-autogen": "^2.13.0",
-        "swagger-ui-express": "^4.1.6"```
+        "swagger-ui-express": "^4.1.6"
+        
+        //for task
+        torch==1.8.0
+        numpy
+        transformers==4.1.1
+        tqdm==4.32.1
+        emoji
+        soynlp
+        python-dotenv
+        tweepy==3.10.0
+        konlpy
+        ```
 * 설치방법
      ```
         cd server
