@@ -1,5 +1,6 @@
 import 'package:app/model/model_detail.dart';
 import 'package:app/model/model_product.dart';
+import 'package:app/screen/screen_home.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -43,9 +44,10 @@ class _DetailScreen extends State<DetailScreen> {
 
     return SafeArea(
         child: Scaffold(
+            backgroundColor: const Color.fromRGBO(0xF8, 0xFF, 0xEA, 1),
             appBar: AppBar(
                 title: const Text("My Test APP"),
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: Colors.blue,
                 leading: Container()),
             body: Center(
                 child: FutureBuilder<Detail>(
@@ -88,6 +90,14 @@ class _DetailScreen extends State<DetailScreen> {
                   color: Colors.deepPurple,
                 );
               },
-            ))));
+            )),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()));
+              },
+              child: const Icon(Icons.arrow_back),
+              backgroundColor: Colors.blue,
+            )));
   }
 }

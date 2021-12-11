@@ -56,9 +56,10 @@ class _KeywordScreen extends State<KeywordScreen> {
         },
         child: SafeArea(
             child: Scaffold(
+                backgroundColor: const Color.fromRGBO(0xF8, 0xFF, 0xEA, 1),
                 appBar: AppBar(
                     title: const Text("My Test APP"),
-                    backgroundColor: Colors.deepPurple,
+                    backgroundColor: Colors.blue,
                     leading: Container()),
                 body: Center(
                     child: FutureBuilder<Keyword>(
@@ -70,56 +71,13 @@ class _KeywordScreen extends State<KeywordScreen> {
                       }
                       return Column(children: [
                         Container(
-                            margin: EdgeInsets.fromLTRB(
-                                10, height * 0.35, 10, height * 0.05),
-                            height: 50,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                if (!selectedKeyword.contains(index)) {
-                                  return Container(
-                                    margin: const EdgeInsets.fromLTRB(
-                                        10, 10, 10, 10),
-                                    child: ElevatedButton(
-                                        style: ButtonStyle(backgroundColor:
-                                            MaterialStateProperty.resolveWith(
-                                                (states) {
-                                          return Colors.deepPurple;
-                                        })),
-                                        onPressed: () {
-                                          setState(() {
-                                            selectedKeyword.add(index);
-                                          });
-                                        },
-                                        child: Text(snapshot
-                                            .data!.keywords[index]
-                                            .toString())),
-                                  );
-                                }
-                                return Container();
-                              },
-                              itemCount: snapshot.data!.keywords.length,
-                              separatorBuilder:
-                                  (BuildContext context, int index) =>
-                                      const Divider(),
+                            margin: const EdgeInsets.all(10),
+                            child: const Text(
+                              "선택된 키워드",
+                              style: TextStyle(fontSize: 20),
                             )),
-                        IconButton(
-                            onPressed: () {
-                              List<String> keywords_ = [];
-                              for (int i = 0; i < selectedKeyword.length; i++) {
-                                keywords_.add(
-                                    oriKeyword.keywords[selectedKeyword[i]]);
-                              }
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ProductScreen(
-                                          keywords: keywords_,
-                                          books: oriKeyword.books)));
-                            },
-                            icon: const Icon(Icons.skip_next)),
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        SizedBox(
+                            //margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             height: 50,
                             child: ListView.separated(
                               scrollDirection: Axis.horizontal,
@@ -143,20 +101,106 @@ class _KeywordScreen extends State<KeywordScreen> {
                                             .toString())),
                                   );
                                 }
-                                return Container();
+                                return const SizedBox.shrink();
                               },
                               itemCount: oriKeyword.keywords.length,
                               separatorBuilder:
                                   (BuildContext context, int index) =>
                                       const Divider(),
-                            ))
+                            )),
+                        SizedBox(
+                            height: height * 0.65,
+                            child: ListView.separated(
+                                addRepaintBoundaries: false,
+                                itemBuilder: (context, index) {
+                                  if (!selectedKeyword.contains(index)) {
+                                    return ElevatedButton(
+                                        style: ButtonStyle(backgroundColor:
+                                            MaterialStateProperty.resolveWith(
+                                                (states) {
+                                          return Colors.white;
+                                        })),
+                                        onPressed: () {
+                                          setState(() {
+                                            selectedKeyword.add(index);
+                                          });
+                                        },
+                                        child: Text(
+                                            snapshot.data!.keywords[index]
+                                                .toString(),
+                                            style: const TextStyle(
+                                                color: Color.fromRGBO(
+                                                    138, 138, 138, 1))));
+                                  }
+                                  return Visibility(
+                                    child: Container(),
+                                    visible: false,
+                                  );
+                                },
+                                itemCount: snapshot.data!.keywords.length,
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  if (selectedKeyword.contains(index)) {
+                                    return Visibility(
+                                      child: Container(),
+                                      visible: false,
+                                    );
+                                  }
+                                  return const Divider(
+                                    color: Colors.white,
+                                  );
+                                })),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: width * 0.35,
+                                child: ElevatedButton(
+                                    style: ButtonStyle(backgroundColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) {
+                                      return Colors.white;
+                                    })),
+                                    onPressed: () {
+                                      setState(() {
+                                        selectedKeyword.clear();
+                                      });
+                                    },
+                                    child: const Text(
+                                      "초기화",
+                                      style: TextStyle(color: Colors.blue),
+                                    )),
+                              ),
+                              const Padding(padding: EdgeInsets.all(10)),
+                              SizedBox(
+                                  width: width * 0.35,
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        List<String> keywords_ = [];
+                                        for (int i = 0;
+                                            i < selectedKeyword.length;
+                                            i++) {
+                                          keywords_.add(oriKeyword
+                                              .keywords[selectedKeyword[i]]);
+                                        }
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProductScreen(
+                                                        keywords: keywords_,
+                                                        books:
+                                                            oriKeyword.books)));
+                                      },
+                                      child: Text("결과보기")))
+                            ])
                       ]);
                     } else if (snapshot.hasError) {
                       return Text("${snapshot.error}");
                     }
 
                     return const CircularProgressIndicator(
-                      color: Colors.deepPurple,
+                      color: Colors.blue,
                     );
                   },
                 )),
@@ -166,7 +210,7 @@ class _KeywordScreen extends State<KeywordScreen> {
                         MaterialPageRoute(builder: (context) => HomeScreen()));
                   },
                   child: const Icon(Icons.arrow_back),
-                  backgroundColor: Colors.purple,
+                  backgroundColor: Colors.blue,
                 ))));
   }
 }
