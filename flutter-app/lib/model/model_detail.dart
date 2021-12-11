@@ -13,10 +13,21 @@ class Detail {
       required this.price});
 
   factory Detail.fromJson(Map<String, dynamic> json) {
+    var intro = "";
+    var contents = "";
+
+    try {
+      intro = json['intro'];
+    } on Error catch (_, err) {}
+
+    try {
+      contents = json['contents'];
+    } on Error catch (_, err) {}
+
     return Detail(
         title: json['title'],
-        intro: json['intro'],
-        contents: json['contents'],
+        intro: intro,
+        contents: contents,
         author: json['author'],
         price: json['price']);
   }
