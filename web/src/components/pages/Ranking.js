@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router";
-
+import axios from "axios";
+import { Button } from "@mui/material";
 const Ranking = () => {
     const { state } = useLocation();
     const navigate = useNavigate();
@@ -22,7 +23,8 @@ const Ranking = () => {
     
     */
     return (
-        <>
+        <div style={{ width: "80vw", margin: "auto", textAlign: "left" }}>
+            <h2>추천 리스트</h2>
             {state.map((i, idx) => (
                 <div
                     key={idx}
@@ -52,16 +54,22 @@ const Ranking = () => {
                     <p style={{ margin: 0 }}>{i.price}원 |</p>
                     <p style={{ margin: 0 }}>지은이 {i.author}</p>
                     <p style={{ margin: 0 }}>isbn : {i.isbn}</p>
-                    <button
+                    <Button
+                        variant="outlined"
                         onClick={(e) => {
                             e.preventDefault();
+                            e.stopPropagation();
+                            axios
+                                .get(`http://localhost:5000/wishlist/${i["_id"]}`, { withCredentials: true })
+                                .then((res) => console.log(res))
+                                .catch((e) => console.log(e));
                         }}
                     >
                         장바구니에 담기
-                    </button>
+                    </Button>
                 </div>
             ))}
-        </>
+        </div>
     );
 };
 

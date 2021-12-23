@@ -1,80 +1,94 @@
-// const Mypage = () => {
-//     return <div>mypage</div>;
-// };
-
-// export default Mypage;
-
-import List from "../shared/List";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import withAuth from "../container/withAuth";
 
-function Cart({ isLogin }) {
-    const [wishlist, setWishlist] = useState([]);
-
-    useEffect(() => {
+const Mypage = () => {
+    const navigate = useNavigate();
+    const [state, setState] = useState([]);
+    function fetch() {
         axios
-            .get(`http://localhost:5000/product/wishlist`)
-            .then((res) => {
-                setWishlist(res.data.cartlist);
-            })
-            .catch((e) => console.error(e));
+            .get("http://localhost:5000/user/", { withCredentials: true })
+            .then((res) => setState(res.data.data))
+            .catch((e) => console.log(e));
+    }
+    useEffect(() => {
+        function fetch() {
+            axios
+                .get("http://localhost:5000/user/", { withCredentials: true })
+                .then((res) => setState(res.data.data))
+                .catch((e) => console.log(e));
+        }
+        fetch();
     }, []);
 
-    function wishListOnClick(_id) {
-        if (isLogin) {
-            axios
-                .delete(`http://localhost:5000/product/wishlist/${_id}`)
-                .then((res) => setWishlist(res.data.cartlist))
-                .catch((e) => console.error(e));
-        } else {
-            window.alert("로그인이 필요한 서비스입니다!");
-        }
-    }
-
     return (
-        <div>
-            <h2>Shopping List</h2>
-            {wishlist.map((product, idx) => {
-                const { name, price, imageUrl, _id } = product;
-                return (
-                    <List
-                        kdy={idx}
-                        product={name}
-                        price={price}
-                        imageUrl={imageUrl}
-                        onWishlist={false}
-                        btnMsg={"장바구니에서 빼기"}
-                        wishListOnClick={() => {
-                            wishListOnClick(_id);
-                        }}
-                    />
-                );
-            })}
-        </div>
-    );
-}
-/*                        <List
+        <>
+            {state.length == 0 ? (
+                <h4>장바구니 목록이 없습니다.</h4>
+            ) : (
+                <div style={{ width: "80vw", margin: "auto", textAlign: "left" }}>
+                    <h2>장바구니</h2>
+                    {state.map((i, idx) => (
+                        <div
                             key={idx}
-                            product={name}
-                            price={price}
-                            imageUrl={imageUrl}
-                            negKeywords={negKeywords}
-                            posKeywords={posKeywords}
-                            onWishlist={cart.includes(_id)}
-                            btnMsg="장바구니에 담기"
-                            wishListOnClick={() => wishListOnClick(_id)}
+                            style={{
+                                minHeight: "0px",
+                                display: "grid",
+                                gridTemplateColumns: "1fr 3fr",
+                                gridTemplateRows: "repeat(5,2rem)",
+                                margin: "2rem 0",
+                                padding: "1rem 0",
+                                borderBottom: "1px solid #ececec",
+                                textAlign: "left",
+                                cursor: "pointer",
+                            }}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                navigate(`/book/${i["_id"]}`);
+                            }}
                         >
-                            <div
-                                className="List-product"
-                                style={{ cursor: "pointer" }}
+                            <img
+                                style={{ gridColumn: "1", gridRow: "1 / span 5", justifySelf: "center" }}
+                                alt="cover"
+                                src={i.cover}
+                                width="150px"
+                            />
+                            <h5 style={{ margin: 0 }}>{i.title}</h5>
+                            <p style={{ margin: 0 }}>{i.price}원 |</p>
+                            <p style={{ margin: 0 }}>지은이 {i.author}</p>
+                            <p style={{ margin: 0 }}>isbn : {i.isbn}</p>
+                            <Button
+                                variant="outlined"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    history.push(`/detail/${_id}`);
+                                    e.stopPropagation();
+                                    axios
+                                        .delete(`http://localhost:5000/wishlist/${i["_id"]}`, { withCredentials: true })
+                                        .then((res) => fetch())
+                                        .catch((e) => console.log(e));
                                 }}
                             >
-                                상세페이지 보기
-                            </div>
-                        </List> */
-export default withAuth(Cart);
-//product, price, productDetail, likeword, hateword
+                                장바구니에서 빼기
+                            </Button>
+                        </div>
+                    ))}
+                </div>
+            )}
+            <Button
+                variant="contained"
+                onClick={(e) => {
+                    e.preventDefault();
+                    axios.get("http://localhost:5000/auth/logout", { withCredentials: true }).then((res) => {
+                        console.log(res);
+                        if (res.status === 200) {
+                            navigate("/");
+                        }
+                    });
+                }}
+            >
+                로그아웃
+            </Button>
+        </>
+    );
+};

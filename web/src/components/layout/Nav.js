@@ -1,71 +1,68 @@
-import "./Nav.css";
-import { Link } from "react-router-dom";
-import withAuth from "../container/withAuth";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import Switch from "@mui/material/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 import axios from "axios";
-
-function Nav({ isLogin, logoff, userData, history, login }) {
-    useEffect(() => {
+axios.defaults.withCredentials = true;
+export default function MenuAppBar() {
+    const navigate = useNavigate();
+    // useEffect(() => {
+    //     async function get_auth() {
+    //         await axios
+    //             .get("http://localhost:5000/auth/status")
+    //             .then((res) => setAuth(true))
+    //             .catch((e) => {
+    //                 console.log(e);
+    //                 if (e.response.status === 404) {
+    //                     setAuth(false);
+    //                 }
+    //             });
+    //     }
+    //     get_auth();
+    // });
+    const onClick = (e) => {
+        e.preventDefault();
         axios
             .get("http://localhost:5000/auth/status")
             .then((res) => {
-                if (res.status === 200) {
-                    login(res.data.userData);
-                } else {
-                    logoff();
-                }
+                console.log(res);
+                navigate("/mypage");
             })
-            .catch((e) => {
-                console.log("NavErr ", e);
-            });
-    }, [isLogin]);
-
+            .catch((e) => navigate("/login"));
+    };
     return (
-        <>
-            <nav>
-                <img src={`${process.env.PUBLIC_URL}/logo.svg`} alt="logo undefined" />;
-                {!isLogin ? (
-                    <ul>
-                        <li>
-                            <Link to="/">홈</Link>
-                        </li>
-                        <li>
-                            <Link to="/login">로그인</Link>
-                        </li>
-                        <li>
-                            <Link to="/register">회원가입</Link>
-                        </li>
-                    </ul>
-                ) : (
-                    <ul>
-                        <li>
-                            <Link to="/">홈</Link>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    axios
-                                        .get("http://localhost:5000/auth/logout")
-                                        .then((res) => {
-                                            logoff();
-                                            history.push("/");
-                                        })
-                                        .catch((e) => console.error(e));
-                                }}
-                            >
-                                로그아웃
-                            </a>
-                        </li>
-                        <li>
-                            <Link to="/cart">{userData.name}님의 장바구니</Link>
-                        </li>
-                    </ul>
-                )}
-            </nav>
-        </>
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static">
+                <Toolbar>
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{ flexGrow: 1 }}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            navigate("/");
+                        }}
+                        style={{ cursor: "pointer" }}
+                    >
+                        키북키북
+                    </Typography>
+                    {
+                        <div>
+                            <IconButton size="large" onClick={onClick}>
+                                <LockOpenIcon />
+                            </IconButton>
+                        </div>
+                    }
+                </Toolbar>
+            </AppBar>
+        </Box>
     );
 }
-
-export default withAuth(Nav);
