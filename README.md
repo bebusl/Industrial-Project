@@ -23,7 +23,7 @@
 
 **웹화면**
 <br />
-![web](https://blog.kakaocdn.net/dn/w342d/btroFL7SDc0/1JciKEMUKFjl9Jb8wnrCD0/img.gif)
+![web](https://user-images.githubusercontent.com/49019236/159374223-0038473f-9767-42b6-b4ea-7eeb6e7ae667.gif)
 
 ## 의존성 및 설치 방법
 * 용량이 큰 파일은 git에 올리지 않았음.
